@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "note": "Repository development profiles. The helper's 'profile' command selects at most one profile, and only when its solution file is in the repository; markers are supporting evidence, never enough on their own. Paths are relative to this folder; a file with the same relative path under <AKZO_HOME>\\profiles-custom\\ is used instead (upgrades never write there). With 'profile -Query', only 'core', the shared skills, the Sonar rules, and skills whose trigger (a case-insensitive regex) matches the request are loaded; the others are returned as 'deferred'. 'profile -Task fix' loads only the source-grounded skill and the Sonar rules; '-Task refactor' adds the profile skills whose trigger matches.",
+  "shared": {
+    "skills": [
+      "skills/shared/source-grounded-development/guide.md",
+      "skills/shared/pre-pr-review/guide.md"
+    ],
+    "onDemand": {
+      "skills/shared/business-rule-branch-coverage/guide.md": "\\brules?\\b|branch|decision|condition|yes/no|\\bif\\b|state|transition|duplicate|legacy|plugin|workflow|bug|fix|review|pbi|requirement"
+    },
+    "riskChurnLines": 200,
+    "riskRules": [
+      {
+        "level": "high",
+        "path": "\\.(csproj|fsproj|vbproj|sln|slnx)$",
+        "reason": "project or solution file: changes what is built and referenced"
+      },
+      {
+        "level": "high",
+        "path": "(^|/)Directory\\.(Packages|Build)\\.(props|targets)$",
+        "reason": "central package or build settings: affects every project"
+      },
+      {
+        "level": "high",
+        "path": "(^|/)[^/]*\\.runsettings$",
+        "reason": "test and coverage settings: changes what the quality gate measures"
+      }
+    ]
+  },
+  "profiles": [
+    {
+      "id": "modern",
+      "name": "Modern",
+      "repository": "Portable.Backend",
+      "solution": "Portable.Backend.sln",
+      "markers": {
+        "packages": [
+          "StrawberryShake",
+          "Microsoft.Azure.Functions.Worker"
+        ],
+        "files": [
+          "\\.graphql$"
+        ],
+        "code": [
+          "IDispatcher"
+        ]
+      },
+      "skills": [
+        "skills/modern/architecture/guide.md",
+        "skills/modern/cqrs-api-contracts/guide.md",
+        "skills/modern/fluentvalidation/guide.md",
+        "skills/modern/graphql-strawberryshake/guide.md",
+        "skills/modern/dependency-injection/guide.md",
+        "skills/modern/sonarcloud/guide.md",
+        "skills/modern/testing/guide.md"
+      ],
+      "sonarRules": "instructions/modern/sonar-rules.instructions.md",
+      "commands": {
+        "build": "dotnet build Portable.Backend.sln",
+        "test": "dotnet test Portable.Backend.sln --settings coverlet.runsettings --collect:\"XPlat Code Coverage\""
+      },
+      "commandFiles": [
+        "coverlet.runsettings"
+      ],
+      "review": {
+        "xmlDocs": "convention",
+        "maxLineLength": 0,
+        "broadCatch": "warning"
+      },
+      "riskRules": [
+        {
+          "level": "high",
+          "path": "(^|/)ServiceRegistration[^/]*\\.cs$",
+          "reason": "dependency injection registration"
+        },
+        {
+          "level": "high",
+          "path": "(^|/)(Program|Startup)\\.cs$",
+          "reason": "host startup and middleware pipeline"
+        },
+        {
+          "level": "high",
+          "path": "(?i)(exception|error|routing)[^/]*middleware[^/]*\\.cs$",
+          "reason": "exception or routing middleware: shapes every HTTP response"
+        },
+        {
+          "level": "high",
+          "path": "\\.graphql$|(^|/)\\.graphqlrc\\.json$",
+          "reason": "GraphQL schema, operation, or client configuration"
+        },
+        {
+          "level": "high",
+          "path": "(?i)(^|/)generated/[^/]*\\.cs$|\\.(g|generated)\\.cs$",
+          "reason": "generated GraphQL client: regenerate, never hand-edit"
+        },
+        {
+          "level": "high",
+          "path": "(?i)(^|/)(contracts?|dtos?)/|(Request|Response|Dto|Contract)\\.cs$",
+          "reason": "API contract: consumers depend on its shape"
+        },
+        {
+          "level": "medium",
+          "path": "Handler\\.cs$",
+          "reason": "command or query handler"
+        },
+        {
+          "level": "medium",
+          "path": "Validator\\.cs$",
+          "reason": "validation rules"
+        },
+        {
+          "level": "medium",
+          "path": "Service\\.cs$",
+          "reason": "service logic"
+        }
+      ],
+      "core": [
+        "skills/modern/architecture/guide.md",
+        "skills/modern/testing/guide.md",
+        "skills/modern/sonarcloud/guide.md"
+      ],
+      "triggers": {
+        "skills/modern/cqrs-api-contracts/guide.md": "command|query|handler|contract|request|response|dto|endpoint|function|api|feature|create|update|delete",
+        "skills/modern/fluentvalidation/guide.md": "validat|\\brules?\\b|required|mandatory|duplicate|error|feature|create|update",
+        "skills/modern/graphql-strawberryshake/guide.md": "graphql|strawberry|mutation|schema|operation|\\bclient|data service|query|fetch|save|persist|feature",
+        "skills/modern/dependency-injection/guide.md": "regist|inject|\\bdi\\b|dependenc|startup|program\\.cs|service|collaborator|interface|abstraction|helper|factory|feature"
+      }
+    },
+    {
+      "id": "framework",
+      "name": "Framework",
+      "repository": "Portable.Legacy",
+      "solution": "Portable.Legacy.sln",
+      "markers": {
+        "packages": [
+          "Microsoft.CrmSdk",
+          "Microsoft.PowerPlatform.Dataverse.Client",
+          "Scrutor",
+          "EntityFramework"
+        ],
+        "files": [
+          "ServiceRegistration\\.CrmServices\\.cs$"
+        ],
+        "code": [
+          "CrmOperationBase"
+        ]
+      },
+      "skills": [
+        "skills/framework/architecture/guide.md",
+        "skills/framework/add-feature/guide.md",
+        "skills/framework/xrm-service/guide.md",
+        "skills/framework/cqrs-development/guide.md",
+        "skills/framework/dependency-injection/guide.md",
+        "skills/framework/sonarcloud/guide.md",
+        "skills/framework/xml-documentation/guide.md",
+        "skills/framework/run-tests/guide.md",
+        "skills/framework/coverage/guide.md"
+      ],
+      "sonarRules": "instructions/framework/sonar-rules.instructions.md",
+      "commands": {
+        "build": "dotnet build Portable.Legacy.sln",
+        "test": "dotnet test Portable.Legacy.sln --collect:\"XPlat Code Coverage\" --results-directory ./TestResults"
+      },
+      "commandFiles": [],
+      "review": {
+        "xmlDocs": "required",
+        "maxLineLength": 200,
+        "broadCatch": "warning"
+      },
+      "riskRules": [
+        {
+          "level": "high",
+          "path": "(^|/)ServiceRegistration[^/]*\\.cs$",
+          "reason": "dependency injection registration"
+        },
+        {
+          "level": "high",
+          "path": "(^|/)(Program|Startup)\\.cs$",
+          "reason": "host startup and middleware pipeline"
+        },
+        {
+          "level": "high",
+          "path": "(?i)(exception|error|routing)[^/]*middleware[^/]*\\.cs$",
+          "reason": "exception or routing middleware: shapes every HTTP response"
+        },
+        {
+          "level": "high",
+          "path": "(?i)(^|/)(contracts?|dtos?)/|(Request|Response|Dto|Contract)\\.cs$",
+          "reason": "API contract: consumers depend on its shape"
+        },
+        {
+          "level": "medium",
+          "path": "Handler\\.cs$",
+          "reason": "command or query handler"
+        },
+        {
+          "level": "medium",
+          "path": "Validator\\.cs$",
+          "reason": "validation rules"
+        },
+        {
+          "level": "medium",
+          "path": "Service\\.cs$",
+          "reason": "service and Xrm logic"
+        }
+      ],
+      "core": [
+        "skills/framework/architecture/guide.md",
+        "skills/framework/run-tests/guide.md",
+        "skills/framework/sonarcloud/guide.md"
+      ],
+      "triggers": {
+        "skills/framework/add-feature/guide.md": "endpoint|feature|function|\\bnew\\b|create|\\badd\\b|api",
+        "skills/framework/xrm-service/guide.md": "xrm|crm|dataverse|entity|attribute|option ?set|plugin|workflow|service|endpoint|query|save|update|create",
+        "skills/framework/cqrs-development/guide.md": "command|query|handler|cqrs|request|response|endpoint|feature",
+        "skills/framework/dependency-injection/guide.md": "regist|inject|\\bdi\\b|dependenc|scrutor|startup|service|collaborator|interface|abstraction|helper|factory|feature",
+        "skills/framework/xml-documentation/guide.md": "xml|document|summary|comment|\\bdocs?\\b|public|interface|feature|endpoint|review",
+        "skills/framework/coverage/guide.md": "coverage|sonar|gate|\\bpr\\b|pull request|review|test"
+      }
+    }
+  ]
+}

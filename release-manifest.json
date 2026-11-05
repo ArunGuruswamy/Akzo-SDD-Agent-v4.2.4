@@ -1,0 +1,1260 @@
+{
+    "product":  "Akzo SDD Agent",
+    "maintainer":  "Arun RG",
+    "version":  "4.2.4",
+    "built":  "2026-11-05T08:09:26",
+    "builtBy":  "local release build (make-release.ps1 steps run inline; scripts not executed under the machine policy)",
+    "signature":  "arch-bench.ps1: NotSigned; select.ps1: NotSigned; akzo.ps1: NotSigned; multi-repo.ps1: NotSigned; ab-bench.ps1: NotSigned; benchmark.ps1: NotSigned; benchmark-architecture.ps1: NotSigned; build-analyzer.ps1: NotSigned; install.ps1: NotSigned; Install-MasterAgent.ps1: NotSigned; make-release.ps1: NotSigned; perf-bench.ps1: NotSigned; Start-Development.ps1: NotSigned; test.ps1: NotSigned; test-analyzer.ps1: NotSigned; test-architecture-retrieval.ps1: NotSigned; test-contract-readiness.ps1: NotSigned; test-gui.ps1: NotSigned; test-ide.ps1: NotSigned; test-interactions.ps1: NotSigned; test-portable.ps1: NotSigned",
+    "files":  [
+                  {
+                      "path":  "benchmark/agent-evaluations.md",
+                      "sha256":  "F03B3E413333ABA0368F7A40C9F08B45662B0C54AE4D313D127775A281E21C53",
+                      "bytes":  9173
+                  },
+                  {
+                      "path":  "benchmark/arch-4.2.0.md",
+                      "sha256":  "FD374AEB1D67C94084CCD1904D676FD3C0795A18A5A37FF4DDF265A7A922C33A",
+                      "bytes":  2195
+                  },
+                  {
+                      "path":  "benchmark/arch-bench.ps1",
+                      "sha256":  "C91321C45210E7894F1EE92D0FA740E727EC8A5892D0FA289C8743993952BE47",
+                      "bytes":  4740
+                  },
+                  {
+                      "path":  "benchmark/interleaved-3.4.1.md",
+                      "sha256":  "7CDAE63AAA1BBAE5CCD827D420F4AD2F540980B6F60860F8143E30CD936440BE",
+                      "bytes":  1208
+                  },
+                  {
+                      "path":  "benchmark/perf-3.7.0.md",
+                      "sha256":  "FEA4A830FD91D5717C1B4E77D234A9AC4E9BC356A37F46341F49310BCA4310D0",
+                      "bytes":  2197
+                  },
+                  {
+                      "path":  "benchmark/perf-4.0.0.md",
+                      "sha256":  "4CA3C2A6976EA56A33DC89AA8A5074E760E029DD9CD4B6465543A8EA44D5CBB5",
+                      "bytes":  2610
+                  },
+                  {
+                      "path":  "benchmark/perf-4.1.0.md",
+                      "sha256":  "AB79C4C33B757107ECDEFDFE8B635843D9CE1A12C67BE55494DE98875CA60967",
+                      "bytes":  2607
+                  },
+                  {
+                      "path":  "benchmark/results-3.4.1.md",
+                      "sha256":  "858AE26BA3FCF3897719E922DC9F04777997A28CC52F5EB56C14B6BEBB32A709",
+                      "bytes":  2594
+                  },
+                  {
+                      "path":  "benchmark/results-template.csv",
+                      "sha256":  "9D8713B323CF23CE11EDE6C04018BC507D66B4F63B8C1C446F68CA05C8332CB4",
+                      "bytes":  630
+                  },
+                  {
+                      "path":  "benchmark/verification-3.7.0.md",
+                      "sha256":  "2A1983FA530889158274B26395BA46E3D17A857DDD6A2746CD680CEBA4AEFA62",
+                      "bytes":  3934
+                  },
+                  {
+                      "path":  "CHANGELOG.md",
+                      "sha256":  "FD14B7778148543B85373CBA941AD24F44AC38C149A9BD5EF823B609AD7C4DD0",
+                      "bytes":  91440
+                  },
+                  {
+                      "path":  "config/repos.example.json",
+                      "sha256":  "4F6DDA264377652D76959114A86070CC442AD62FA0F3C6990FB4660C8D74764B",
+                      "bytes":  427
+                  },
+                  {
+                      "path":  "copilot/agents/akzo-master-sdd.agent.md",
+                      "sha256":  "E46F39F6D1A1A8B4F47A6312A187BC6696C084F39220489A2D917C84C8292966",
+                      "bytes":  59973
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Akzo.ArchitectureAnalyzer.deps.json",
+                      "sha256":  "F4ABEA48362A94A25317B386C76181A5AD27B08B8C3DEDABE1C88523AB83E316",
+                      "bytes":  24797
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Akzo.ArchitectureAnalyzer.dll",
+                      "sha256":  "D34BD78A17D7ED0D0662B0EF064A1A4B73F175F9A00159DDCC9C6C65CF66B08E",
+                      "bytes":  216064
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Akzo.ArchitectureAnalyzer.dll.config",
+                      "sha256":  "C66F65B0865ED940ED17D88FB01FCE16C8D47EC08838B5B4C8CAA6CDD8E5460B",
+                      "bytes":  32245
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Akzo.ArchitectureAnalyzer.pdb",
+                      "sha256":  "9B000C35D4092C364A779E5CEA4C27815856A443DD6661878D1B8BD9AA92EC99",
+                      "bytes":  51024
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Akzo.ArchitectureAnalyzer.runtimeconfig.json",
+                      "sha256":  "BB3BE27AE9594D34B057637D8FA1B41D2DDCD62D715E1F2824941FF5853F365E",
+                      "bytes":  476
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/cs/System.CommandLine.resources.dll",
+                      "sha256":  "0613E63DEA0DFC46B8A090EE41CA0AC93902FDF876107FE116697F57FF997ECB",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/de/System.CommandLine.resources.dll",
+                      "sha256":  "6F77E87CDD5729DA8EF9F4F7DED1424667AD81711E0FF80C264707A522DAAB6A",
+                      "bytes":  18984
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/es/System.CommandLine.resources.dll",
+                      "sha256":  "99D6CFB2A639BEC41C755DFA1942CA42B23E3272411392468D5D21CE8582DAA8",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/fr/System.CommandLine.resources.dll",
+                      "sha256":  "3F5B7616477A792B1F58B820527BAB0B85B621398BF027840368D5325C44E158",
+                      "bytes":  18976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/it/System.CommandLine.resources.dll",
+                      "sha256":  "70B1CD23221E5F467BB39D5EDE5B3B6668766A0A659428254B208D5930528C67",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/ja/System.CommandLine.resources.dll",
+                      "sha256":  "A60F1B1B73BF8227DAFCB1FD187580C9DCB05D26CCFC0D0FCDE1A684E5C7B5FB",
+                      "bytes":  19016
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/ko/System.CommandLine.resources.dll",
+                      "sha256":  "14C738C5C21287E3232032565BE6BB45CCDFA81BCAFE14CBD2EC27FCA60B2BF2",
+                      "bytes":  19016
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/Microsoft.Bcl.AsyncInterfaces.dll",
+                      "sha256":  "1C95B1A776931CA1C4F2911B2AE1CC99EB78F547CD5FEEAF5CDBDF10CEDAD0DB",
+                      "bytes":  26376
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/Microsoft.Build.Locator.dll",
+                      "sha256":  "286DB396B2B8500AAD8BC188E41A11CBBBCB3BFFC5598B464C683C1C04C9BF60",
+                      "bytes":  34848
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe",
+                      "sha256":  "C1B584616C8EC3E8269890487F4950813D60C9FB1A941678E43D3E01758FBA87",
+                      "bytes":  458632
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config",
+                      "sha256":  "04DADE54BE9721416E052D7D9602A95E121490E86824EC39D28AAACC00E934E5",
+                      "bytes":  4576
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/Microsoft.IO.Redist.dll",
+                      "sha256":  "2ABBA74A23E680BA613BAAD9D510428EDD913E09F90509D248B85665A03F5014",
+                      "bytes":  131880
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/Newtonsoft.Json.dll",
+                      "sha256":  "BCB1DD23D554D3A4E17B2C0F08761FC571857DE37291B9BDD8C91788BE3AA842",
+                      "bytes":  722304
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/pl/System.CommandLine.resources.dll",
+                      "sha256":  "29D28DC053AEB5D2C320F15331BE4C7EFA4CB1643E5F8EAD92A2E145EBD92E2B",
+                      "bytes":  19000
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/pt-BR/System.CommandLine.resources.dll",
+                      "sha256":  "7FFB47C41090D7B9E4DA2F2C74557C186604822E904BF029683B2B565746AF96",
+                      "bytes":  18976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/ru/System.CommandLine.resources.dll",
+                      "sha256":  "CDA0D35F61F5D60B29F6B2DD8BA8AB8F65B0EF8976DF04F0657F90C1BD572592",
+                      "bytes":  19512
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Buffers.dll",
+                      "sha256":  "3AF1E07305BED0ABE0CF32D9854E0A7F5F470216ADEE1B87D02350BE09D31B35",
+                      "bytes":  23856
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Collections.Immutable.dll",
+                      "sha256":  "77D705FE51F224D77B25FC06EDE39E2921F08B46A961A027D6EE49A4BB19C127",
+                      "bytes":  259360
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.CommandLine.dll",
+                      "sha256":  "EF4BC45850128E2351BDAE75AE736A62A2BA0E6A3DCA75B5A8BF2B0BC7DEAC3D",
+                      "bytes":  148504
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.IO.Pipelines.dll",
+                      "sha256":  "D881B5E01C527BB7CAFA3C2482F7CBFBF158FCBB6F93EFB4381B638C2D4EA6F7",
+                      "bytes":  84792
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Memory.dll",
+                      "sha256":  "B8FE216AFF0F6D162F8EEFE7BE1712162B7D8199E20CE2E70FFAC36C7CE20A4C",
+                      "bytes":  145192
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Numerics.Vectors.dll",
+                      "sha256":  "22C84BE385FE8BA6D0E0138952748F28D781FCE36078B5A7AED91A6104BCD99B",
+                      "bytes":  110344
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Runtime.CompilerServices.Unsafe.dll",
+                      "sha256":  "2D6F419D641682D8EFC4A40E850D2E85DE519D6823B93DAF2AEEE63206D4E32D",
+                      "bytes":  19224
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Text.Encodings.Web.dll",
+                      "sha256":  "AD6BE4BE7E0183F3EABAC3F747B834C557156942C7D2CE12039477AD0874FBFB",
+                      "bytes":  79664
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Text.Json.dll",
+                      "sha256":  "EAD4137D1B7ED06D55F609ACFEDFDAD041977B029A9D2C7E8B596F698FEDD8AC",
+                      "bytes":  726320
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.Threading.Tasks.Extensions.dll",
+                      "sha256":  "692C324C02A922F890AAF5948C54EC9758F5AB7019B8E8AB169C106DDD3231F4",
+                      "bytes":  27944
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/System.ValueTuple.dll",
+                      "sha256":  "E905D102585B22C6DF04F219AF5CBDBFA7BC165979E9788B62DF6DCC165E10F4",
+                      "bytes":  25232
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/tr/System.CommandLine.resources.dll",
+                      "sha256":  "06F12A7373D17D8E4C70DAD2D3C1B8280A69242D39BE2E86C691E0819306A7D8",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/zh-Hans/System.CommandLine.resources.dll",
+                      "sha256":  "A4C168C6A73D9755DDC72C541BA6BCCCC1AA2A8040B84E3EAE1900E23D9752E1",
+                      "bytes":  18976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-net472/zh-Hant/System.CommandLine.resources.dll",
+                      "sha256":  "DACB3B425FAFF62C7BC1854E27AB8133A28AA4A8A98185BBF06C0B24FD82046A",
+                      "bytes":  19016
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/cs/System.CommandLine.resources.dll",
+                      "sha256":  "0613E63DEA0DFC46B8A090EE41CA0AC93902FDF876107FE116697F57FF997ECB",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/de/System.CommandLine.resources.dll",
+                      "sha256":  "6F77E87CDD5729DA8EF9F4F7DED1424667AD81711E0FF80C264707A522DAAB6A",
+                      "bytes":  18984
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/es/System.CommandLine.resources.dll",
+                      "sha256":  "99D6CFB2A639BEC41C755DFA1942CA42B23E3272411392468D5D21CE8582DAA8",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/fr/System.CommandLine.resources.dll",
+                      "sha256":  "3F5B7616477A792B1F58B820527BAB0B85B621398BF027840368D5325C44E158",
+                      "bytes":  18976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/it/System.CommandLine.resources.dll",
+                      "sha256":  "70B1CD23221E5F467BB39D5EDE5B3B6668766A0A659428254B208D5930528C67",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/ja/System.CommandLine.resources.dll",
+                      "sha256":  "A60F1B1B73BF8227DAFCB1FD187580C9DCB05D26CCFC0D0FCDE1A684E5C7B5FB",
+                      "bytes":  19016
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/ko/System.CommandLine.resources.dll",
+                      "sha256":  "14C738C5C21287E3232032565BE6BB45CCDFA81BCAFE14CBD2EC27FCA60B2BF2",
+                      "bytes":  19016
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/Microsoft.Build.Locator.dll",
+                      "sha256":  "FCC85336217BE226F90A5DDFA55151DC84FCB2A76FE242F5274535C6B878AA30",
+                      "bytes":  50720
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json",
+                      "sha256":  "52D1CF6F6A9F9381F2FE0C3FE60C374650CC903B266B40770ECD89A47CF77934",
+                      "bytes":  3582
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll",
+                      "sha256":  "A774B9971A94FFF2718D817AF86045F4C717F333BEF36E31680EDA9DC133800D",
+                      "bytes":  450824
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll.config",
+                      "sha256":  "73B9A880C39B4F2713FA5118E3222488DD04E124627D316632BAA7EF27691312",
+                      "bytes":  33939
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json",
+                      "sha256":  "7F19D83A3F514EEBE09A06EC35E45613715B2430B1EB3C35F904740A9C6086B3",
+                      "bytes":  369
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/Newtonsoft.Json.dll",
+                      "sha256":  "265B086E198E2C8473AAF0D2BF0AB6123022431A6E89E181E9D75BDCD1735BE0",
+                      "bytes":  722808
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/pl/System.CommandLine.resources.dll",
+                      "sha256":  "29D28DC053AEB5D2C320F15331BE4C7EFA4CB1643E5F8EAD92A2E145EBD92E2B",
+                      "bytes":  19000
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/pt-BR/System.CommandLine.resources.dll",
+                      "sha256":  "7FFB47C41090D7B9E4DA2F2C74557C186604822E904BF029683B2B565746AF96",
+                      "bytes":  18976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/ru/System.CommandLine.resources.dll",
+                      "sha256":  "CDA0D35F61F5D60B29F6B2DD8BA8AB8F65B0EF8976DF04F0657F90C1BD572592",
+                      "bytes":  19512
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/System.Collections.Immutable.dll",
+                      "sha256":  "33D310036FEC4D1A78F75C885EA091C0E054AD08D50C424CC8DB8042544AAB3C",
+                      "bytes":  251160
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/System.CommandLine.dll",
+                      "sha256":  "EF4BC45850128E2351BDAE75AE736A62A2BA0E6A3DCA75B5A8BF2B0BC7DEAC3D",
+                      "bytes":  148504
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/tr/System.CommandLine.resources.dll",
+                      "sha256":  "06F12A7373D17D8E4C70DAD2D3C1B8280A69242D39BE2E86C691E0819306A7D8",
+                      "bytes":  18992
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/zh-Hans/System.CommandLine.resources.dll",
+                      "sha256":  "A4C168C6A73D9755DDC72C541BA6BCCCC1AA2A8040B84E3EAE1900E23D9752E1",
+                      "bytes":  18976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/BuildHost-netcore/zh-Hant/System.CommandLine.resources.dll",
+                      "sha256":  "DACB3B425FAFF62C7BC1854E27AB8133A28AA4A8A98185BBF06C0B24FD82046A",
+                      "bytes":  19016
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Humanizer.dll",
+                      "sha256":  "D6853075547D7E303EFD60354D911A2FF18EDBA582CDA2FA59D91A2E5DCF9E98",
+                      "bytes":  355944
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Build.Locator.dll",
+                      "sha256":  "C156417F9E587A1D565B85E2EBCEA70A075E9E13A2091A9900D611630A3AD0AA",
+                      "bytes":  50720
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.CodeAnalysis.CSharp.dll",
+                      "sha256":  "B594A0F49F27E9DA51D3E9D319B1ED34FE3B04F566EE47BB5F63E7117D0BFBAD",
+                      "bytes":  6895376
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+                      "sha256":  "871535D0AFBBF228C4AC9418AD73F2F7B4D21823A34047BE6242DDD451DEE862",
+                      "bytes":  958728
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.CodeAnalysis.dll",
+                      "sha256":  "695F4DF0DB3DA81C4A5B46D754860EAC60717C99C6B8E34D629DE5F9214E2254",
+                      "bytes":  3067664
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll",
+                      "sha256":  "5A6716A0330D4B43399D6FB4CA7628E08C78C3D18A16887FFD39EC95A9F8D5FF",
+                      "bytes":  21304
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.CodeAnalysis.Workspaces.dll",
+                      "sha256":  "C711F62DE874BA3B61E2E2A47AD4C9DADD257874F6F712926271E05274847ACB",
+                      "bytes":  4264208
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.CodeAnalysis.Workspaces.MSBuild.dll",
+                      "sha256":  "07F12C023A17441E753D6F8BD7FC1056718DD05E3BFD2CA5409E923E87AD9FAC",
+                      "bytes":  143632
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+                      "sha256":  "4A13B5D5D15C995544AF66A60E985DB87DC38D13CB8F812349E4A6313DBB5F9F",
+                      "bytes":  65288
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Extensions.DependencyInjection.dll",
+                      "sha256":  "599CC9AFE9098912D387EDC458E4CFCCBD8E16EFC1EFA03A3032ACE6586960C1",
+                      "bytes":  92424
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Extensions.Logging.Abstractions.dll",
+                      "sha256":  "A84041CA0910EDF4BB98A4CD8CAB72C3ECE1A24E8287B47E2C2EFD97C8B64647",
+                      "bytes":  66336
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Extensions.Logging.dll",
+                      "sha256":  "477BDBCF60D2848FB06AD0B52E87D36D1CD7A00894C361D671F55E2BEA169F57",
+                      "bytes":  51480
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Extensions.Options.dll",
+                      "sha256":  "8E37A4357A0C99D2AB2CDCDCFAAF55B2D54433C8A76C098F5C7326942B1BEFCC",
+                      "bytes":  65296
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.Extensions.Primitives.dll",
+                      "sha256":  "07E3F88172EEADF7A60074F9B14DBDB5236D0C37A973FC67887825D0FB299EA3",
+                      "bytes":  44296
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.NET.StringTools.dll",
+                      "sha256":  "E9F3BB01C775D96594BCDDDD3342DCE8ACB81882E03BFD37BF51BBA890DF84C2",
+                      "bytes":  30856
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.VisualStudio.Setup.Configuration.Interop.dll",
+                      "sha256":  "A3A5AEC9E3985D3BEABE782F94EE0A25E9A3D7A696C9104B8B53DAA8BB023D8E",
+                      "bytes":  21904
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Microsoft.VisualStudio.SolutionPersistence.dll",
+                      "sha256":  "A1150F4A162D9C9992B6E99B2949E2DE092017182264218B7B5666CEEBBC16D4",
+                      "bytes":  172072
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Akzo.ArchitectureAnalyzer.exe",
+                      "sha256":  "30825CD828F4A2D2A8043AA49D788D0A1FFA5F7A6CD8B6ED4F55E28187F6DEC4",
+                      "bytes":  217088
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Akzo.ArchitectureAnalyzer.exe.config",
+                      "sha256":  "E30332BBA62CCFD23581A012E990217DF1E476B9BCE41515F48EECCA2B92D389",
+                      "bytes":  3567
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Akzo.ArchitectureAnalyzer.pdb",
+                      "sha256":  "F3A9BD5EB634660AD4ADEA23770BC9BFA0676E9182E5E5E0CB623F3592C232A2",
+                      "bytes":  43928
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/Microsoft.Bcl.AsyncInterfaces.dll",
+                      "sha256":  "1C95B1A776931CA1C4F2911B2AE1CC99EB78F547CD5FEEAF5CDBDF10CEDAD0DB",
+                      "bytes":  26376
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/Microsoft.Build.Locator.dll",
+                      "sha256":  "286DB396B2B8500AAD8BC188E41A11CBBBCB3BFFC5598B464C683C1C04C9BF60",
+                      "bytes":  34848
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe",
+                      "sha256":  "C1B584616C8EC3E8269890487F4950813D60C9FB1A941678E43D3E01758FBA87",
+                      "bytes":  458632
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.exe.config",
+                      "sha256":  "04DADE54BE9721416E052D7D9602A95E121490E86824EC39D28AAACC00E934E5",
+                      "bytes":  4576
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/Microsoft.IO.Redist.dll",
+                      "sha256":  "2ABBA74A23E680BA613BAAD9D510428EDD913E09F90509D248B85665A03F5014",
+                      "bytes":  131880
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Buffers.dll",
+                      "sha256":  "3AF1E07305BED0ABE0CF32D9854E0A7F5F470216ADEE1B87D02350BE09D31B35",
+                      "bytes":  23856
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Collections.Immutable.dll",
+                      "sha256":  "77D705FE51F224D77B25FC06EDE39E2921F08B46A961A027D6EE49A4BB19C127",
+                      "bytes":  259360
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.IO.Pipelines.dll",
+                      "sha256":  "D881B5E01C527BB7CAFA3C2482F7CBFBF158FCBB6F93EFB4381B638C2D4EA6F7",
+                      "bytes":  84792
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Memory.dll",
+                      "sha256":  "B8FE216AFF0F6D162F8EEFE7BE1712162B7D8199E20CE2E70FFAC36C7CE20A4C",
+                      "bytes":  145192
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Numerics.Vectors.dll",
+                      "sha256":  "22C84BE385FE8BA6D0E0138952748F28D781FCE36078B5A7AED91A6104BCD99B",
+                      "bytes":  110344
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Runtime.CompilerServices.Unsafe.dll",
+                      "sha256":  "2D6F419D641682D8EFC4A40E850D2E85DE519D6823B93DAF2AEEE63206D4E32D",
+                      "bytes":  19224
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Text.Encodings.Web.dll",
+                      "sha256":  "AD6BE4BE7E0183F3EABAC3F747B834C557156942C7D2CE12039477AD0874FBFB",
+                      "bytes":  79664
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Text.Json.dll",
+                      "sha256":  "EAD4137D1B7ED06D55F609ACFEDFDAD041977B029A9D2C7E8B596F698FEDD8AC",
+                      "bytes":  726320
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.Threading.Tasks.Extensions.dll",
+                      "sha256":  "692C324C02A922F890AAF5948C54EC9758F5AB7019B8E8AB169C106DDD3231F4",
+                      "bytes":  27944
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-net472/System.ValueTuple.dll",
+                      "sha256":  "E905D102585B22C6DF04F219AF5CBDBFA7BC165979E9788B62DF6DCC165E10F4",
+                      "bytes":  25232
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-netcore/Microsoft.Build.Locator.dll",
+                      "sha256":  "FCC85336217BE226F90A5DDFA55151DC84FCB2A76FE242F5274535C6B878AA30",
+                      "bytes":  50720
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.deps.json",
+                      "sha256":  "52D1CF6F6A9F9381F2FE0C3FE60C374650CC903B266B40770ECD89A47CF77934",
+                      "bytes":  3582
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.dll",
+                      "sha256":  "A774B9971A94FFF2718D817AF86045F4C717F333BEF36E31680EDA9DC133800D",
+                      "bytes":  450824
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-netcore/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.runtimeconfig.json",
+                      "sha256":  "7F19D83A3F514EEBE09A06EC35E45613715B2430B1EB3C35F904740A9C6086B3",
+                      "bytes":  369
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/BuildHost-netcore/System.Collections.Immutable.dll",
+                      "sha256":  "33D310036FEC4D1A78F75C885EA091C0E054AD08D50C424CC8DB8042544AAB3C",
+                      "bytes":  251160
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Humanizer.dll",
+                      "sha256":  "2C522CD285DE2E3A02520F91203F548E454B980821F10DF90E801BD7D3F5C43E",
+                      "bytes":  308840
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Bcl.AsyncInterfaces.dll",
+                      "sha256":  "1C95B1A776931CA1C4F2911B2AE1CC99EB78F547CD5FEEAF5CDBDF10CEDAD0DB",
+                      "bytes":  26376
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Build.Locator.dll",
+                      "sha256":  "D11619956BA83465C0392DCC107257DD017C78EF90D3C13AA28C0339BD98C358",
+                      "bytes":  34848
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.CodeAnalysis.CSharp.dll",
+                      "sha256":  "34CE616B610BE07F61A345E01AA317A0DD78FD32B4DDAAFA1EBB28C526341099",
+                      "bytes":  8571152
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.CodeAnalysis.CSharp.Workspaces.dll",
+                      "sha256":  "765486F1EE8BFD68DD4815F83376FDB7BC899554A72373DE8978E3C88B7D6341",
+                      "bytes":  1187592
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.CodeAnalysis.dll",
+                      "sha256":  "D6C489F45A19B5EAD980E5F6272293F1FE71CC721ED1F0D20D6E59DA9D592E22",
+                      "bytes":  5166384
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.CodeAnalysis.ExternalAccess.RazorCompiler.dll",
+                      "sha256":  "7C1C2A3A3DD9DAA18759EC75DD3FE38A73B23C3767EC9A39DD1535EEFE36D503",
+                      "bytes":  21816
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.CodeAnalysis.Workspaces.dll",
+                      "sha256":  "3166B6614DFC6A43F0DFEEF9BE2DF54A21D4A1660A58C1E18BC5F63B03B315CA",
+                      "bytes":  6492464
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.CodeAnalysis.Workspaces.MSBuild.dll",
+                      "sha256":  "1285B4EDACCAD26DF8A6CA09E888C2DAA9EBEF3632B92D8EB1E1BA527BFB34AA",
+                      "bytes":  144648
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+                      "sha256":  "3DBEBC6A7B84E63ED1C92BC821F11E1B4B5A30536012ABD9F6E2EC5A4239C8F1",
+                      "bytes":  64288
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Extensions.DependencyInjection.dll",
+                      "sha256":  "9A7E5D960B4CA79981FC3321A7099AC79FA2E2EBA026AD43728B3F9CED991452",
+                      "bytes":  97544
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Extensions.Logging.Abstractions.dll",
+                      "sha256":  "C071F7BB1DAC06185232727D8B43412537D856A7EE23B8D128F45D5774B70270",
+                      "bytes":  69384
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Extensions.Logging.dll",
+                      "sha256":  "D3CC7A9F04B7A937B008E49582AFBED278E417735B291E179B7BED1C006C870F",
+                      "bytes":  54552
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Extensions.Options.dll",
+                      "sha256":  "B432FE6C8B010163C8D3C1C0FDC3F20ED48DB9975CB51A3FAEBEE31D01F8D644",
+                      "bytes":  68888
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.Extensions.Primitives.dll",
+                      "sha256":  "AD6ABFA157E0492CBF3180878AC3B5D22406DFA5BC9D333EBAFDDB69A77C6799",
+                      "bytes":  50456
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.IO.Redist.dll",
+                      "sha256":  "2ABBA74A23E680BA613BAAD9D510428EDD913E09F90509D248B85665A03F5014",
+                      "bytes":  131880
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/Microsoft.VisualStudio.SolutionPersistence.dll",
+                      "sha256":  "A9D80E519C246B04E3764D8B39A2938E076E8D8DDED37695D550D339F5B02511",
+                      "bytes":  181304
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Buffers.dll",
+                      "sha256":  "3AF1E07305BED0ABE0CF32D9854E0A7F5F470216ADEE1B87D02350BE09D31B35",
+                      "bytes":  23856
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Collections.Immutable.dll",
+                      "sha256":  "77D705FE51F224D77B25FC06EDE39E2921F08B46A961A027D6EE49A4BB19C127",
+                      "bytes":  259360
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Composition.AttributedModel.dll",
+                      "sha256":  "B16C9C813214D47F2E8738F26B98C94ED2E3A53A9697A8339026F2CBA3D54F9D",
+                      "bytes":  21256
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Composition.Convention.dll",
+                      "sha256":  "F9E3D1F9382F7649F9AB2DA600671FB1AD82CD2EF490A8BF44789A3AE607CA82",
+                      "bytes":  54040
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Composition.Hosting.dll",
+                      "sha256":  "75F138B78D7DDF8F761085E1C7810D0ED959FD08CBF3726A09F77834C17E591F",
+                      "bytes":  56584
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Composition.Runtime.dll",
+                      "sha256":  "19610B3FFF6C1E0F09808265A2F94145FFB46499E690066501118F959925A542",
+                      "bytes":  27416
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Composition.TypedParts.dll",
+                      "sha256":  "D635BDF672607CB49D02D7C2BFE863D5DBE4C7F869AE510A5F18DA17F3AC09BC",
+                      "bytes":  65800
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Diagnostics.DiagnosticSource.dll",
+                      "sha256":  "9C4F0069F18D0FFC71056562318D1CAEC0B60820188426D7005A39612853993C",
+                      "bytes":  199944
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.IO.Pipelines.dll",
+                      "sha256":  "D881B5E01C527BB7CAFA3C2482F7CBFBF158FCBB6F93EFB4381B638C2D4EA6F7",
+                      "bytes":  84792
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Memory.dll",
+                      "sha256":  "B8FE216AFF0F6D162F8EEFE7BE1712162B7D8199E20CE2E70FFAC36C7CE20A4C",
+                      "bytes":  145192
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Numerics.Vectors.dll",
+                      "sha256":  "22C84BE385FE8BA6D0E0138952748F28D781FCE36078B5A7AED91A6104BCD99B",
+                      "bytes":  110344
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Reflection.Metadata.dll",
+                      "sha256":  "8FC17840E7B7DB173E84FC6C7DAAF92441069B83A07B2CB054599E7DD36AB86B",
+                      "bytes":  511240
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Runtime.CompilerServices.Unsafe.dll",
+                      "sha256":  "2D6F419D641682D8EFC4A40E850D2E85DE519D6823B93DAF2AEEE63206D4E32D",
+                      "bytes":  19224
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Text.Encoding.CodePages.dll",
+                      "sha256":  "B77EE852824A6E8098FBADE000BEB42CE9DF32FA4189A00D5E7F472F6C6A5030",
+                      "bytes":  766224
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Text.Encodings.Web.dll",
+                      "sha256":  "AD6BE4BE7E0183F3EABAC3F747B834C557156942C7D2CE12039477AD0874FBFB",
+                      "bytes":  79664
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Text.Json.dll",
+                      "sha256":  "EAD4137D1B7ED06D55F609ACFEDFDAD041977B029A9D2C7E8B596F698FEDD8AC",
+                      "bytes":  726320
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Threading.Channels.dll",
+                      "sha256":  "A42E45A1BB8E6528D244F8611CF1E3E731CAB481A67928C1BE815E635FFE8EC7",
+                      "bytes":  74000
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.Threading.Tasks.Extensions.dll",
+                      "sha256":  "692C324C02A922F890AAF5948C54EC9758F5AB7019B8E8AB169C106DDD3231F4",
+                      "bytes":  27944
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/net472/System.ValueTuple.dll",
+                      "sha256":  "E905D102585B22C6DF04F219AF5CBDBFA7BC165979E9788B62DF6DCC165E10F4",
+                      "bytes":  25232
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/Newtonsoft.Json.dll",
+                      "sha256":  "22C649F75FCE5BE7C7CCDA8880473B634EF69ECF33F5D1AB8AD892CAF47D5A07",
+                      "bytes":  712464
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll",
+                      "sha256":  "87D728E173F24377A5E5B78CFF97E7F885566D99701F557FA9AE09FBA9540182",
+                      "bytes":  70968
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/runtimes/win/lib/net7.0/System.Security.Cryptography.Pkcs.dll",
+                      "sha256":  "0781B33B97F6753BD53ED2DF3F892AD851338F9B3E840BD523B6FFFEC34B5581",
+                      "bytes":  313976
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll",
+                      "sha256":  "1501AD59E05DB6CD73D82426C73D14D6DDC72403713DBE4099CD6C1A650A8A46",
+                      "bytes":  173856
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll",
+                      "sha256":  "AA8CB35D10093FE4BDA643ACD30EFB70AB539B7D079249414340F03AA8D641E3",
+                      "bytes":  801064
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/runtimes/win/lib/net8.0/System.Security.Cryptography.Pkcs.dll",
+                      "sha256":  "443C614AB2F18918770EE5187E5DEB39CD09C06A475CA6ED58C7A4B466D3E658",
+                      "bytes":  320336
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/runtimes/win/lib/net8.0/System.Windows.Extensions.dll",
+                      "sha256":  "5FE6E577F4C9667F04A187567D63B7E567A0448B436B7771A637158F92C27620",
+                      "bytes":  74512
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/source.sha256",
+                      "sha256":  "7B81D45A9F9B3D80013FE2861F94AB83CA8372302E17DF23CB2793D34259C4E1",
+                      "bytes":  65
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.CodeDom.dll",
+                      "sha256":  "4D33E2986A84D4460853E2B98D3A1BA9F8AA2950F7FA12FF6AD2E15A4BCCFD18",
+                      "bytes":  186496
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Collections.Immutable.dll",
+                      "sha256":  "33D310036FEC4D1A78F75C885EA091C0E054AD08D50C424CC8DB8042544AAB3C",
+                      "bytes":  251160
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Composition.AttributedModel.dll",
+                      "sha256":  "685FF30C87A1AB691C94838F3170F0246EBCD6E42E8C77C9F1E032E731EF552A",
+                      "bytes":  20248
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Composition.Convention.dll",
+                      "sha256":  "715FA2DAEBC1D1147BCB6586C33EACE3F45EC7D503318C2D58052DA17986FFFB",
+                      "bytes":  53024
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Composition.Hosting.dll",
+                      "sha256":  "99FFE4F95A190C641969330C1CCB8DF166423C568DEB42E9D54021A39A819F77",
+                      "bytes":  55072
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Composition.Runtime.dll",
+                      "sha256":  "C651C414118B381425BC9CB56D3E319DF8F9FBBEB55AEF14A0E828C207D29866",
+                      "bytes":  26384
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Composition.TypedParts.dll",
+                      "sha256":  "865029F27E5584A884745D8E887BB1D331A590B7CE8FA2D44F40111CED97FDD0",
+                      "bytes":  64792
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Configuration.ConfigurationManager.dll",
+                      "sha256":  "11C2D7962088CC62ADA72DDAC36BDBB4C464B59C0ABE6BA2F4B6DB9AB409B809",
+                      "bytes":  442144
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Diagnostics.DiagnosticSource.dll",
+                      "sha256":  "A6DB055B969B5A38F7ADB76A455442E01442B51E2AF0573E9DD55E272DD721F2",
+                      "bytes":  173840
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Diagnostics.EventLog.dll",
+                      "sha256":  "E5E59A7528AD0A2FBDE0175F2179DAA198BE55B1DA6E2BDA2CB4BCBF156AAB24",
+                      "bytes":  52488
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Formats.Nrbf.dll",
+                      "sha256":  "412E67D49C3687C93632C0A8F6B537F47E92EA36215EE5CBFC641CBF349FF533",
+                      "bytes":  67360
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.IO.Pipelines.dll",
+                      "sha256":  "A39F3A7026FE23FF1B2A84DA3D36278F5A410B809CB2A100F886C2FE27A6CD85",
+                      "bytes":  77608
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Reflection.Metadata.dll",
+                      "sha256":  "CD87C789B7FA364165590F841770CDD481ADF1478849B7F7FC6AD7972BEBAC3D",
+                      "bytes":  501000
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Reflection.MetadataLoadContext.dll",
+                      "sha256":  "3F83C147000658BDBBB0D73BE7859DDBCB7F92824A045609D85CA896B0F5C68D",
+                      "bytes":  242296
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Resources.Extensions.dll",
+                      "sha256":  "4815062CCB3D4F6595DF820F4FEAF537BD36C707D74E0595D32797D0E6FE5BBC",
+                      "bytes":  105776
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Security.Cryptography.Pkcs.dll",
+                      "sha256":  "F4FCECE252AF1532CFBC70FD89B2AFD79F506EE6286F3558994CA41502714EA1",
+                      "bytes":  266024
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Security.Cryptography.ProtectedData.dll",
+                      "sha256":  "DF4611DE8DA1B0A9C643C94CDCE53FCBCFF3B6169AC6482DB917D47DD3BCA0C6",
+                      "bytes":  37656
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Security.Cryptography.Xml.dll",
+                      "sha256":  "B6CD19E08262B70D836EBB442D2D439E7949F7D613F9F6187F416D8511635574",
+                      "bytes":  211752
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Security.Permissions.dll",
+                      "sha256":  "4F9354A17C0AC626A40CB2DF9C2C01AD775157CEDFD257A5BA89CE223CC84C27",
+                      "bytes":  116008
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Text.Encodings.Web.dll",
+                      "sha256":  "9C115095C03E95B22310435491DC8C917EB2C95670926A886C2CBF8DD4E8DFC1",
+                      "bytes":  70960
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Text.Json.dll",
+                      "sha256":  "C29E4A31CD3FE90D828B5B57FF3980B8224520334EAFA7241A7B1C31F4DD0949",
+                      "bytes":  643872
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Threading.Tasks.Dataflow.dll",
+                      "sha256":  "64D412C47A94F13255FECF38819B5A74FA0697B5A0DF818C50701CFD624532D9",
+                      "bytes":  186120
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/architecture/System.Windows.Extensions.dll",
+                      "sha256":  "0A0EC39E540F69657A06B60F8C4F6E5065289AE4ECBFAEEDC155BC83D71D613E",
+                      "bytes":  27920
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/typescript/analyze.cjs",
+                      "sha256":  "388828C9671F0A497D1295187CB3AE347724A10482FB88B480100DBD25269D4B",
+                      "bytes":  12647
+                  },
+                  {
+                      "path":  "copilot/modules/analyzers/typescript/README.md",
+                      "sha256":  "20280D331CE8E8F437EF49AB6189C5F2ADFBE583B3977490E44A729594C3FFC4",
+                      "bytes":  1452
+                  },
+                  {
+                      "path":  "copilot/modules/interaction/scripts/select.ps1",
+                      "sha256":  "36A47881EDFDEC1C089273849E9A0550F63D94AF2FCF170CFE620F86EEEF4AA6",
+                      "bytes":  9525
+                  },
+                  {
+                      "path":  "copilot/modules/investigate/scripts/akzo.ps1",
+                      "sha256":  "9BDF8BDCF2663E042C35BF02F85A338BD02E42828D8935B36CF3E5BAE2B7E112",
+                      "bytes":  357649
+                  },
+                  {
+                      "path":  "copilot/modules/investigate/scripts/multi-repo.ps1",
+                      "sha256":  "9320923E7E1CC13614A105E5F58BB499F8C5D4612310DB8E4CE4641A3994AC50",
+                      "bytes":  16350
+                  },
+                  {
+                      "path":  "copilot/modules/plan/assets/plan.md",
+                      "sha256":  "35A1494D07CC88E71F65E9C127C4D92F87271A6C1196B16753A9623B2DDD7659",
+                      "bytes":  7296
+                  },
+                  {
+                      "path":  "copilot/modules/plan/assets/workflow.json",
+                      "sha256":  "F181C54EF75976D80D15CFD7788902B4734A42899F803690D928921A99374A22",
+                      "bytes":  4832
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/instructions/framework/sonar-rules.instructions.md",
+                      "sha256":  "39A07DB80F5163DA5256A00049C1567AF1DD7BCC8EF6BBA588F5F13FFB71B7C9",
+                      "bytes":  7490
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/instructions/modern/sonar-rules.instructions.md",
+                      "sha256":  "D5AB213B1753F9636E90AC69416C84E924CD3EC9AEA71EBF188B9F7D3D63D709",
+                      "bytes":  6076
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/lesson-patterns.json",
+                      "sha256":  "1D2F1106C554A62F4FAD74CF3F1E2BF680F0604B048B6FF57147501A6CCCC12F",
+                      "bytes":  812
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/profiles.json",
+                      "sha256":  "1F34214F6674701EC6436610551F673B3338D83BB82DB5FAE42CEEF59C9D778C",
+                      "bytes":  1269
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/README.md",
+                      "sha256":  "0421B0958785C0A2E23DE0EE5D66FCCCDE47FCADF9D0158ECCC9EDB4502E51F7",
+                      "bytes":  1423
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/add-feature/guide.md",
+                      "sha256":  "9C73C90E227BD418711922407608C83BF2813F17274D3F485E30A7979805ACA0",
+                      "bytes":  1943
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/architecture/guide.md",
+                      "sha256":  "19FE36601D4C87D2A96627BD117A6AA587C7E49F8EB9159B6BD30459D96239B6",
+                      "bytes":  1093
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/coverage/guide.md",
+                      "sha256":  "ADC8CFD51C7C33BAD160336DA4B7C319A99517454A4071F8CDC683124CACF188",
+                      "bytes":  1537
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/cqrs-development/guide.md",
+                      "sha256":  "95AB18484EBFD3E935524EEDC740D5F60A91AE94DFA23A301F784EB5882B91F3",
+                      "bytes":  1098
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/dependency-injection/guide.md",
+                      "sha256":  "2CF77619A0434F8D2C0C4F60C2739B2DEAD2E3B22C23417C6A643FF98DE6F864",
+                      "bytes":  1002
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/run-tests/guide.md",
+                      "sha256":  "0ABA41E9CEE6F92DD89AA8A863AB611C24D9278674BE7172B1510C877E513576",
+                      "bytes":  1498
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/sonarcloud/guide.md",
+                      "sha256":  "6ACE1D3483FA4E73B45B6F520911B30C14DA511DD88A787169CE8FAE0746703F",
+                      "bytes":  1384
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/xml-documentation/guide.md",
+                      "sha256":  "F843999A263E859D185DAD7CBF0218B19E65A0954CFF6250AC4F5EEEA4406DB0",
+                      "bytes":  1159
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/framework/xrm-service/guide.md",
+                      "sha256":  "3187498FC008615E98054FBE2EFC0B1095F612E7574CA92FFCC30DCC5E2DEE4B",
+                      "bytes":  1562
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/architecture/guide.md",
+                      "sha256":  "CBDE8E34253AC8689B587BF67DECA82035D04B9C6BA0DD015B97140F24038DAD",
+                      "bytes":  1168
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/cqrs-api-contracts/guide.md",
+                      "sha256":  "7FD9E623F1470F2B4AF232E561676EE7AB25B5EDD8E8C2D289D6B5C5C37D935A",
+                      "bytes":  1472
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/dependency-injection/guide.md",
+                      "sha256":  "8B4983BBC8E1AADFF98067139219E88B71DE901213783DEC00170FF5837C0186",
+                      "bytes":  1029
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/fluentvalidation/guide.md",
+                      "sha256":  "53A548AC5FB22702EAE6866341131C46F695287623D72E2D0670AEAF69C4F36C",
+                      "bytes":  2456
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/graphql-strawberryshake/guide.md",
+                      "sha256":  "938F734A067D3F21D7E73415FC1AABE98B12EF8790E9D0D8AA777B32C19D7F30",
+                      "bytes":  2078
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/sonarcloud/guide.md",
+                      "sha256":  "17E793FC44D923DD0F1B70E13F4D6384312883A34516086384AF94C42BAA2EB6",
+                      "bytes":  1142
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/modern/testing/guide.md",
+                      "sha256":  "6CDCE7EFB217A322B4EAC8AC9BF6EA4270DED20AAF031E424916910031C9F4A1",
+                      "bytes":  1515
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/shared/business-rule-branch-coverage/guide.md",
+                      "sha256":  "9FE4AF7CB884BBFA618CD8BB9AB7292C062E0D3D459E5A4C40BEBB5FD90603D6",
+                      "bytes":  3638
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/shared/pre-pr-review/guide.md",
+                      "sha256":  "831FC6ABEB3D7EC41B30C5B14B5C5BF387295904526D7535A44293B6FEE5311C",
+                      "bytes":  6074
+                  },
+                  {
+                      "path":  "copilot/modules/profiles/skills/shared/source-grounded-development/guide.md",
+                      "sha256":  "D02227AF313306E19C3D04473F7F2BD29A9CDDC462676BAFB475BB7F8703133D",
+                      "bytes":  9042
+                  },
+                  {
+                      "path":  "copilot/modules/spec/assets/spec.md",
+                      "sha256":  "7D15445D0FDFB01E6AAB6693C9EB279FB16FB66AE5E2065BE011AC9316FBD984",
+                      "bytes":  5048
+                  },
+                  {
+                      "path":  "copilot/modules/workflow/engineering-skills.md",
+                      "sha256":  "1549DE0448C9C26959036F47C0AC341DEB5FAB46976A3B7ACDB11FB52EFFD101",
+                      "bytes":  21664
+                  },
+                  {
+                      "path":  "copilot/modules/workflow/interactive-decisions.md",
+                      "sha256":  "505BC9186695F283E01CD0C900BCDB4679FB042416CDEE037561F6735D81581E",
+                      "bytes":  4865
+                  },
+                  {
+                      "path":  "copilot/modules/workflow/new-development.md",
+                      "sha256":  "6B305D98FDFBB02B411DFD97826555EB9CDBE4DE68F59848024D930110020883",
+                      "bytes":  52963
+                  },
+                  {
+                      "path":  "copilot/modules/workflow/portable-development.md",
+                      "sha256":  "954A03B8C0912BD87B5B51A94EE4D2A4E60E1AFEB4DB9D29FF65A6E6F58D87E2",
+                      "bytes":  6329
+                  },
+                  {
+                      "path":  "examples/DEMO-101-gloss-measurement-range/plan.md",
+                      "sha256":  "D41596A2747C5F2E4035267009C9F47894C9CF9E615E24D8288B6AA2EDB8F0A2",
+                      "bytes":  2744
+                  },
+                  {
+                      "path":  "examples/DEMO-101-gloss-measurement-range/spec.md",
+                      "sha256":  "79CC4FDCC4AA6661DF6667B4457B9517AAF3FED56B68180BEFE82829A26EC7C7",
+                      "bytes":  4029
+                  },
+                  {
+                      "path":  "installation-guide.html",
+                      "sha256":  "B73C28D9D360612A714ED09C0E8AB54C52F1A3FBAB69D5F025789DF366BFAB37",
+                      "bytes":  80425
+                  },
+                  {
+                      "path":  "Install-MasterAgent.cmd",
+                      "sha256":  "5F1696D0953329B6C59CE67225D46F65BFB8863FD44A1F023816EDDA77941763",
+                      "bytes":  602
+                  },
+                  {
+                      "path":  "README.md",
+                      "sha256":  "68F69EB398EA037146087F3CDBA32BBF3AA2FF687ABD97482ACDE4B98B17E3BF",
+                      "bytes":  43094
+                  },
+                  {
+                      "path":  "RELEASE-NOTES.md",
+                      "sha256":  "58433EAE85CC6F4706BC4E26E3B5F41DC48E75370867F6C314DEE8ECB7F36C49",
+                      "bytes":  4340
+                  },
+                  {
+                      "path":  "scripts/ab-bench.ps1",
+                      "sha256":  "27A9C6658A682AAD88699F5E1271B7609D20EC58A3F6184A4740B5C2660DC8C3",
+                      "bytes":  4811
+                  },
+                  {
+                      "path":  "scripts/benchmark.ps1",
+                      "sha256":  "28E2261DC474EB97436127FC5A902A8F61BD81C157117D8C1092B8AE111C748F",
+                      "bytes":  17153
+                  },
+                  {
+                      "path":  "scripts/benchmark-architecture.ps1",
+                      "sha256":  "BCB5D315A3AE587943275EEA61229C76D67BFAB085A4C527177C42AF41BBC18C",
+                      "bytes":  4057
+                  },
+                  {
+                      "path":  "scripts/build-analyzer.ps1",
+                      "sha256":  "9A3040845E4513ACCB5811938B02ACF0BE5321C0E58661D7263224CF2CAAEE52",
+                      "bytes":  3696
+                  },
+                  {
+                      "path":  "scripts/fixtures/profiles.json",
+                      "sha256":  "A4CEF00C1C71FCE82A8BA4A7C4AA57AE464C2FCC07DAA16A7BB6221728557429",
+                      "bytes":  8782
+                  },
+                  {
+                      "path":  "scripts/install.ps1",
+                      "sha256":  "C4BEA6F5B332422B6C82B849224FA7E6CA9668F3C1208D5625EFB213F8B7DC8F",
+                      "bytes":  63548
+                  },
+                  {
+                      "path":  "scripts/Install-MasterAgent.ps1",
+                      "sha256":  "13FAB3D0286C532E93F37177F5C7331453E4BDDDCA5DDB75F7F12AEA29067188",
+                      "bytes":  17993
+                  },
+                  {
+                      "path":  "scripts/make-release.ps1",
+                      "sha256":  "D5E1F5D2D8F602644AC9ACEA8FCD29E96C245AF9D41039819D93F6C6F9D97885",
+                      "bytes":  5382
+                  },
+                  {
+                      "path":  "scripts/NativeFolderPicker.cs",
+                      "sha256":  "6CD00D063951A962AA2068C8EE7452F25903150E7E6B0BBCF864E2ED0A57596B",
+                      "bytes":  3815
+                  },
+                  {
+                      "path":  "scripts/perf-bench.ps1",
+                      "sha256":  "D1C483C3EC9FDA1BE48ED229543FFEE6EC3E4DB4632A6E6C5AC09FF29126B434",
+                      "bytes":  15767
+                  },
+                  {
+                      "path":  "scripts/Start-Development.ps1",
+                      "sha256":  "7C8CEC9DC076CBF4BB1AC27E9CBC5BB48A35451CDDD4642FA3FF33DBFEC6B026",
+                      "bytes":  3134
+                  },
+                  {
+                      "path":  "scripts/test.ps1",
+                      "sha256":  "9C3B3BDC0FC326EF91C3B75ED3ED5AB9DE47523FBE837496E59C353BA3A7928D",
+                      "bytes":  314671
+                  },
+                  {
+                      "path":  "scripts/test-analyzer.ps1",
+                      "sha256":  "49E399C618A35DC251CAA208663367DE846CA7C9795CDDB9C58AD30793D6B567",
+                      "bytes":  7615
+                  },
+                  {
+                      "path":  "scripts/test-architecture-retrieval.ps1",
+                      "sha256":  "6CC2B45775CD2CC71C0D71920A4C97B1F759C6F326A2CBFD974C7DF0F5D3F701",
+                      "bytes":  9913
+                  },
+                  {
+                      "path":  "scripts/test-contract-readiness.ps1",
+                      "sha256":  "C6B31B2F3B84D4630C2AEFBA2E4361ADE9EE398243F9C293D4C0E8BA694E7B8F",
+                      "bytes":  10563
+                  },
+                  {
+                      "path":  "scripts/test-gui.ps1",
+                      "sha256":  "274BDFD349A96230CD71880AAB83FE256F1893E2E50D5F3582C1AC5CB3788CC4",
+                      "bytes":  15232
+                  },
+                  {
+                      "path":  "scripts/test-ide.ps1",
+                      "sha256":  "72374A4685CC590E29E36D5BEF1293DCE2BC39F943C3ED8A97653300F3FD4C14",
+                      "bytes":  12658
+                  },
+                  {
+                      "path":  "scripts/test-interactions.ps1",
+                      "sha256":  "BF7FE44ECFA08241A7B073F0D45D175784F12ADB613E0DDDFDAD7C6AC0540A87",
+                      "bytes":  13790
+                  },
+                  {
+                      "path":  "scripts/test-portable.ps1",
+                      "sha256":  "5044455294B49F2109E836628F92CE980B0073A3E5EB1F1D142B75049F805519",
+                      "bytes":  8558
+                  },
+                  {
+                      "path":  "scripts/test-typescript.cjs",
+                      "sha256":  "93FF7B597EDAE57F9BBF316DF02E80EE08C99159FBAC556D2CDCD11BAA2D05C2",
+                      "bytes":  5099
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/ArchitectureAnalyzer.csproj",
+                      "sha256":  "05D0430FEB7EB716F70E1B3B3D3313F8CFBFE7A9767E1BDA253EB9326271571C",
+                      "bytes":  2108
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/BuildHostStaging.cs",
+                      "sha256":  "254FDF6556CFB37799088624984479254A8AA9DE461D8E419045B2DBA4F49473",
+                      "bytes":  14853
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/Compatibility.cs",
+                      "sha256":  "0A80752671AC08F0AD2B7FF3B45DDAD83EDFF365E001666F398C1C0E880C9EC2",
+                      "bytes":  1146
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/GraphQL.cs",
+                      "sha256":  "B876FFC337D3C5BCECDB136FA223F89C9A0D1CF3E83879F67297B4B9EBF72007",
+                      "bytes":  48963
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/Model.cs",
+                      "sha256":  "537BE3CA2DA98AEDED32595A2736DE81AE2014249AB3E40FE351A1D36DFFF4AF",
+                      "bytes":  4963
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/Program.cs",
+                      "sha256":  "95AAC0C2557DB9B04B694D87D0F660A61C919A4C32D4E3ED80DBC940A92AF544",
+                      "bytes":  14881
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/README.md",
+                      "sha256":  "65AA0F7E1BC95FDA15C6DFAFF00DBA05E685E1029261280345E69059468F460A",
+                      "bytes":  3468
+                  },
+                  {
+                      "path":  "src/ArchitectureAnalyzer/Scanner.cs",
+                      "sha256":  "C640A5ACC0E3461D05D71600213E5D39489FC9E4BB43255A9B2A5B47AC8F7FEE",
+                      "bytes":  52872
+                  },
+                  {
+                      "path":  "Start-Development.cmd",
+                      "sha256":  "935E516278FBBF548E01A4E5C690CFD4E871DB87F84491DE6E45FC314B35D69B",
+                      "bytes":  437
+                  },
+                  {
+                      "path":  "THIRD_PARTY_NOTICES.md",
+                      "sha256":  "1BD9F908E92C2B7A5BC3E732187AB87FBA0854EFC6965938B3931CFF3C99966D",
+                      "bytes":  7353
+                  },
+                  {
+                      "path":  "Uninstall-MasterAgent.cmd",
+                      "sha256":  "B10744717478F3544E74230615923DE18352583AB3077D1594FB6CA0DCC4D9AC",
+                      "bytes":  475
+                  },
+                  {
+                      "path":  "VERSION",
+                      "sha256":  "74F517A082180668F5E05DBF4DC168D523E8BD557955754D2D88011D0A0362DF",
+                      "bytes":  6
+                  }
+              ]
+}

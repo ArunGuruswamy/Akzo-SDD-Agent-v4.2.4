@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "note": "Portable defaults contain only shared source-grounding policies, no repository names or application architecture. Discover every workspace dynamically. Optional explicit user profiles live in profiles-custom/profiles.json and are preserved on upgrade.",
+  "shared": {
+    "skills": [
+      "skills/shared/source-grounded-development/guide.md",
+      "skills/shared/pre-pr-review/guide.md"
+    ],
+    "onDemand": {
+      "skills/shared/business-rule-branch-coverage/guide.md": "\\brules?\\b|branch|decision|condition|yes/no|\\bif\\b|state|transition|duplicate|legacy|plugin|workflow|bug|fix|review|pbi|requirement"
+    },
+    "riskChurnLines": 200,
+    "riskRules": [
+      {
+        "level": "high",
+        "path": "\\.(csproj|fsproj|vbproj|sln|slnx)$",
+        "reason": "project or solution file: changes what is built and referenced"
+      },
+      {
+        "level": "high",
+        "path": "(^|/)Directory\\.(Packages|Build)\\.(props|targets)$",
+        "reason": "central package or build settings: affects every project"
+      },
+      {
+        "level": "high",
+        "path": "(^|/)[^/]*\\.runsettings$",
+        "reason": "test and coverage settings: changes what the quality gate measures"
+      }
+    ]
+  },
+  "profiles": []
+}

@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "_comment": "Portable empty registry. Setup registers the developer's own Git repositories or nested workspaces. Paths, commands, frameworks and architecture are discovered or supplied locally, never distributed defaults. Empty tasksDir uses the agent home outside Git. Upgrades preserve this personal file. Per-repository specsDir and quality.coverage remain supported.",
+  "tasksDir": "",
+  "repos": []
+}

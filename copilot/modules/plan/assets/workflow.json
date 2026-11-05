@@ -1,0 +1,74 @@
+{
+  "about": "User-facing names of the workflow's gates and task statuses. Internal ids (G1-G8, T1-Tn) stay in files, state, and logs; people see the titles. Edit titles and explanations here; do not change ids or document/key, which the helper reads.",
+  "gates": [
+    {
+      "id": "G1",
+      "title": "Requirement Clarification",
+      "purpose": "Settle the questions the PBI and its documents leave open before anything is specified.",
+      "activities": "Read the refined PBI and supporting documents, list missing inputs, contradictions, and unclear terms.",
+      "deliverable": "Answered or explicitly deferred questions, recorded in spec section 9.",
+      "review": "Answer each question or mark it as deferred.",
+      "afterApproval": "The answers become authoritative and the specification uses them."
+    },
+    {
+      "id": "G2",
+      "title": "Existing Code Analysis & Gap Assessment",
+      "document": "spec.md",
+      "key": "Gap map",
+      "purpose": "Find what already exists before anything new is planned.",
+      "activities": "Map every requirement to source documents and to existing code as EXISTING, REUSABLE, EXTEND, NEW, or UNKNOWN, with file and line evidence.",
+      "deliverable": "The gap map in spec section 3a: counts per classification, every NEW and UNKNOWN row, conflicts between documents.",
+      "review": "Whether each requirement is classified correctly and whether existing code was missed.",
+      "afterApproval": "The technical specification is written from the approved map."
+    },
+    {
+      "id": "G3",
+      "title": "Technical Specification Review",
+      "document": "spec.md",
+      "key": "Status",
+      "purpose": "Agree on what will be built before planning how.",
+      "activities": "Write scope, business rules, entities and states, contracts, acceptance criteria, assumptions, and open questions.",
+      "deliverable": "spec.md with a readiness verdict and numbered acceptance criteria.",
+      "review": "Business rules, acceptance criteria, contract changes, and the open questions.",
+      "afterApproval": "The implementation plan is written against the approved specification."
+    },
+    {
+      "id": "G4",
+      "title": "Implementation Plan Approval",
+      "document": "plan.md",
+      "key": "Status",
+      "purpose": "Agree on the file-level changes before any source file is edited.",
+      "activities": "Verify relevant GraphQL contracts, existing validators and execution paths; record readiness in plan section 1b; name file actions, dependencies, tests and generation tasks; run the consistency gate.",
+      "deliverable": "plan.md with contract/validation readiness, descriptive task titles and consistency findings.",
+      "review": "Schema/operation/client compatibility, validator reuse or additions, DI and execution before business operations, preserved error contracts, files and tests. Explicit plan approval is required in every mode.",
+      "afterApproval": "Implementation starts with the first task, test first; no source file is edited before this approval."
+    },
+    {
+      "id": "G5",
+      "title": "Build, Test & Quality Verification",
+      "purpose": "Prove the change works and meets the quality bar.",
+      "activities": "Build, run focused then wider tests, coverage of changed lines, analyzers and Sonar sources, pre-PR review, scope check.",
+      "deliverable": "The verification report: requirement-to-test matrix, baseline versus final counts, Sonar table, open items.",
+      "review": "Anything reported as failed, not run, or not verified.",
+      "afterApproval": "The corporate security check runs, then the handover is final."
+    },
+    {
+      "id": "G8",
+      "title": "Corporate Security Check",
+      "purpose": "Check, from evidence, that the work followed the security controls; it never stands for corporate approval.",
+      "activities": "Authorization, data handling, secrets and suppressions, dependency changes, Sonar, script safety, isolation, memory, installer integrity, Git operations.",
+      "deliverable": "corporate-security-report.html in the task's evidence folder with PASS, FAIL, NOT VERIFIED, or NOT APPLICABLE per control.",
+      "review": "Every FAIL and NOT VERIFIED control.",
+      "afterApproval": "The work is handed over; commit and push still need your separate instruction."
+    }
+  ],
+  "taskStatuses": [
+    { "label": "Not Started", "match": "^(todo|not started|pending)" },
+    { "label": "In Progress", "match": "^(in progress|doing|wip)" },
+    { "label": "Changes Requested", "match": "^changes requested" },
+    { "label": "Implemented - Verification Pending", "match": "^implemented" },
+    { "label": "Blocked", "match": "^blocked" },
+    { "label": "Verified", "match": "^verified" },
+    { "label": "Completed", "match": "^(done|completed)" }
+  ]
+}

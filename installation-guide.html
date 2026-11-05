@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Akzo SDD Agent Setup</title>
+<style>
+:root{--bg:#f7f8fa;--surface:#fff;--text:#1d2330;--muted:#5b6475;--border:#dde2ea;--accent:#1f5fbf;--accent-soft:#e8f0fc;--code:#f1f3f7;--ok:#1e7b46;--warn:#9a5b00;--warn-soft:#fff4e0;--bad:#b42318}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--surface:#1a1f28;--text:#e6e9ef;--muted:#9aa3b2;--border:#2c3340;--accent:#7aa7ef;--accent-soft:#1d2a40;--code:#222833;--ok:#5cc28a;--warn:#e0a84a;--warn-soft:#2d2414;--bad:#f07a6e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 "Segoe UI",system-ui,-apple-system,sans-serif}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:28px 16px}
+header div,main{max-width:960px;margin:0 auto}
+h1{margin:0 0 6px;font-size:1.7rem}
+header p{margin:0;color:var(--muted)}
+nav{max-width:960px;margin:16px auto 0;padding:0 16px;display:flex;flex-wrap:wrap;gap:6px}
+nav a{font-size:.85rem;padding:4px 10px;border:1px solid var(--border);border-radius:999px;color:var(--accent);text-decoration:none;background:var(--surface)}
+main{padding:8px 16px 48px}
+section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 0}
+h2{margin:0 0 12px;font-size:1.25rem}
+h3{margin:18px 0 8px;font-size:1.02rem}
+p,li{color:var(--text)} .muted{color:var(--muted)}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font:.88em Consolas,"Cascadia Mono",monospace;word-break:break-word}
+.cmd{position:relative;margin:8px 0 12px}
+.cmd pre{margin:0;background:var(--code);border:1px solid var(--border);border-radius:8px;padding:12px 84px 12px 12px;overflow-x:auto;font:.88rem/1.45 Consolas,"Cascadia Mono",monospace;white-space:pre}
+.cmd button{position:absolute;top:8px;right:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:6px;padding:4px 10px;font-size:.8rem;cursor:pointer}
+.cmd button:focus-visible,nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border-bottom:1px solid var(--border);padding:8px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.ok{color:var(--ok);font-weight:600}.warn{color:var(--warn);font-weight:600}.bad{color:var(--bad);font-weight:600}
+.note{background:var(--warn-soft);border-left:4px solid var(--warn);padding:10px 12px;border-radius:6px;margin:12px 0}
+.tip{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 12px;border-radius:6px;margin:12px 0}
+ol li,ul li{margin:4px 0}
+footer{max-width:960px;margin:0 auto;padding:0 16px 32px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header><div>
+  <h1>Akzo SDD agent for GitHub Copilot</h1>
+  <p style="font-weight:600;margin:0 0 6px">Akzo Master SDD Agent v4.2.4 RC — Developed and maintained by Arun RG</p>
+  <p>Install, configure, and use the <code>akzo-master-sdd</code> custom agent in VS Code and Visual Studio 2026. Everything below matches the scripts in this repository.</p>
+</div></header>
+<nav aria-label="Sections">
+  <a href="#prereq">Prerequisites</a><a href="#isolation">Activation &amp; isolation</a><a href="#install">Install</a><a href="#vscode">VS Code</a><a href="#vs">Visual Studio</a>
+  <a href="#repos">Repositories</a><a href="#security">Security (G8)</a><a href="#workflow">Tasks &amp; branches</a><a href="#profiles">DAB &amp; CDMS</a><a href="#memory">Memory &amp; Auto Mode</a><a href="#sonar">SonarQube</a><a href="#quick">Quick start</a><a href="#task">Start a task</a><a href="#use">Prompts</a><a href="#access">Permissions</a><a href="#storage">Storage</a><a href="#git">Git Changes</a>
+  <a href="#update">Update &amp; uninstall</a><a href="#trouble">Troubleshooting</a><a href="#evaluation">Evaluation</a>
+</nav>
+<main>
+
+<section id="prereq">
+  <h2>Prerequisites and IDE support</h2>
+  <ul>
+    <li>Windows account without admin rights is fine. Windows PowerShell 5.1 (built in) runs the scripts.</li>
+    <li>Git on <code>PATH</code> (the agent inspects repository state).</li>
+    <li>A GitHub Copilot subscription, signed in inside the IDE.</li>
+    <li>Optional: Python with <code>graphify</code> for code graphs. Without it the agent uses targeted search.</li>
+    <li>For the dual architecture analyzer hosts (<code>arch</code>): <code>net8.0</code> uses <code>dotnet</code> with the installed .NET runtime 8+ and SDK; <code>net472</code> uses installed .NET Framework and compatible Visual Studio/Build Tools MSBuild 18+. Both use Roslyn <b>5.3.0</b> and MSBuildLocator <b>1.11.2</b>. Missing compatible toolsets are reported, never installed by this setup; source fallback is not semantic verification.</li>
+  </ul>
+  <div class="table-wrap"><table>
+    <thead><tr><th>IDE</th><th>Custom agent file</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>VS Code</td><td><code>%USERPROFILE%\.copilot\agents</code></td>
+          <td><span class="ok">Supported</span> per VS Code docs; default discovery of this folder confirmed in VS Code 1.136.1 source. Picker discovery <span class="warn">not yet observed</span> on a real install.</td></tr>
+      <tr><td>Visual Studio 2026</td><td><code>%USERPROFILE%\.github\agents</code> (default, changeable in Tools &gt; Options &gt; GitHub &gt; Copilot)</td>
+          <td><span class="ok">Supported</span> per Microsoft Learn: custom agents from <b>18.4</b>, user-level agents (the folder this installer uses) from <b>18.5</b>. Visual Studio 2022 has no custom agents. <span class="warn">Not tested</span> (no VS 2026 on the build machine).</td></tr>
+      <tr><td>Visual Studio 2022</td><td>—</td><td><span class="bad">Not supported</span>: only built-in agents are documented.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">The agent omits the <code>tools</code> list on purpose: VS Code and Visual Studio use different tool names, and omitting it enables all available tools in both.</p>
+</section>
+
+<section id="isolation">
+  <h2>Activation and isolation</h2>
+  <p>The Akzo workflow runs <b>only when you select akzo-master-sdd</b>. Regular Copilot Chat, Ask/Plan/Agent, and your other custom agents keep their normal behavior.</p>
+  <h3>How it is done</h3>
+  <ul>
+    <li><b>One discovered file.</b> The agent file is the only Akzo file placed where Copilot discovers customizations. It is used when you pick it; it is not an instruction file applied to every chat.</li>
+    <li><b>The whole workflow is inside the agent file.</b> Intake, investigation, spec, plan, implementation, validation, and review rules load only with akzo-master-sdd, and no workflow files are read at run time. The helper script and spec/plan templates sit in <code>%USERPROFILE%\.akzo-agent\modules\</code>, a folder neither IDE scans.</li>
+    <li><b>Why not skills:</b> VS Code adds every discovered skill's name and description to each agent's prompt (verified in the VS Code 1.136.1 source; only skills marked <code>disable-model-invocation</code> are skipped, and those still appear in the <code>/</code> menu). Visual Studio documents skills as something "any agent can discover and use automatically". Neither IDE documents restricting a skill to one agent.</li>
+    <li><b>No subagent use (VS Code).</b> The VS Code copy sets <code>disable-model-invocation: true</code>, which VS Code documents as preventing other agents from invoking it as a subagent. Visual Studio does not document subagent invocation of custom agents, so its copy keeps only the documented fields (<code>name</code>, <code>description</code>).</li>
+    <li><b>Never in Copilot memory.</b> VS Code stores Copilot "memories" in <code>%APPDATA%\Code\User\globalStorage\github.copilot-chat\memory-tool\memories\</code> and loads the first 200 lines of user memory into <b>every</b> agent (Copilot Chat 0.70 source). The agent is told never to write its rules there; <code>install.ps1 -Verify</code> reports memory files that mention Akzo as <code>LEAK</code>, and <b>Repair</b> (<code>-CleanMemory</code>) removes them after a backup. This is how one agent's instructions reach other agents.</li>
+    <li><b>Same chat, different agent.</b> Switching the agent inside one chat keeps the conversation history, so the new agent still sees the earlier Akzo messages. Start a new chat for other work.</li>
+    <li><b>No global instructions.</b> Nothing is written to <code>AGENTS.md</code>, <code>.github/copilot-instructions.md</code>, <code>~/.copilot/instructions</code>, any repository, or VS Code/Visual Studio settings. Existing agents and skills are not changed or disabled.</li>
+  </ul>
+  <p class="muted"><code>-ConfigureVSCode</code> adds read access to the Akzo folders and an auto-approve rule for the helper command (see <a href="#access">Permissions</a>). Read access lets any Copilot agent read those folders without asking; it does not load anything into other agents.</p>
+  <h3>What has been verified</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Check</th><th>How</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Agent selected: the agent holds all seven phases; every file it names exists at the rendered path</td><td><code>scripts\test.ps1</code> (temp profile)</td><td><span class="ok">Passed</span></td></tr>
+      <tr><td>Regular agent: no Akzo text in shared skill, instruction, hook, or VS Code <code>prompts</code> folders; only the agent file (one per IDE) mentions Akzo</td><td><code>scripts\test.ps1</code>; <code>install.ps1 -Verify</code> on your machine</td><td><span class="ok">Passed</span> (file level)</td></tr>
+      <tr><td>Akzo text in VS Code Copilot user or repository memory is reported (<code>LEAK</code>) and removed by Repair with a backup</td><td><code>scripts\test.ps1</code></td><td><span class="ok">Passed</span></td></tr>
+      <tr><td>VS Code copy has <code>disable-model-invocation: true</code>; Visual Studio copy does not</td><td><code>scripts\test.ps1</code></td><td><span class="ok">Passed</span></td></tr>
+      <tr><td>Regular chat prompt contains no Akzo text at run time</td><td>Requires the IDE's chat debug view</td><td><span class="warn">Not verified</span> - inferred from the file layout above</td></tr>
+      <tr><td>Agent appears in the picker and runs the workflow in a live session</td><td>Manual, see the IDE sections</td><td><span class="warn">Not verified</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">To check yourself in VS Code: select a built-in agent, ask "list any Akzo instructions you were given", and run <b>Show Chat Debug View</b> from the Command Palette to inspect the prompt that was sent. Then select akzo-master-sdd-v&lt;version&gt; and confirm it starts with the helper call.</p>
+</section>
+
+<section id="install">
+  <h2>Install</h2>
+  <h3>One click (recommended)</h3>
+  <ol>
+    <li>Double-click <b>Install-MasterAgent.cmd</b> in the Akzo-Agent folder.</li>
+    <li>Click <b>Add Repository…</b>, type or paste the path of your local clone (Ctrl+V; quotes from File Explorer's <i>Copy as path</i> are removed; spaces and <code>\\server\share</code> paths work) or click <b>Browse…</b>, then <b>Validate</b> and <b>Save</b>. The name is suggested from the folder. Repeat for each repository.</li>
+    <li>Click <b>Install / Upgrade</b>. The log shows every file written, backed up, or removed, and ends with <code>== Install finished OK ==</code>; the <b>Agent Installation Status</b> panel then shows each check.</li>
+    <li>Restart VS Code / Visual Studio 2026.</li>
+  </ol>
+  <p>The same window has <b>Repair</b> (restore missing or edited files, clean leaked Akzo text from Copilot memory; it then lists what is still unresolved), <b>Verify Installation</b>, and <b>Uninstall</b>. Install and Repair are idempotent: running them again never creates a second agent. If a write fails, every file changed in that run is restored (rollback).</p>
+  <p><b>Repositories table</b> (name, path, validation, agent status): <b>Edit…</b> (or double-click / Enter) changes the name or path, <b>Remove</b> (or Delete) asks first and removes only the registration, <b>Open in Explorer</b>, <b>Validate</b>, <b>Refresh</b>. Changes are saved to <code>repos.json</code> at once (backed up first). The folder, its Git repository, and your files are never deleted. Changing a repository's path, or removing it, withdraws the authorization you recorded for it, so the agent asks again for the new folder. A folder that is not a Git repository can be saved after a warning, but the agent works only on Git clones.</p>
+  <p><b>Agent Installation Status</b> shows Verified, Warning, Failed, Not Applicable, or Not Checked for: agent files, agent metadata (front matter a strict YAML parser accepts), VS Code and Visual Studio configuration (the installed IDE versions and settings), old-version conflicts, helper and skills, repositories, version consistency, and configuration integrity. <b>Whether the agent appears in the IDE's picker is always Not Checked</b>: it cannot be read from outside the IDE, so the panel gives the manual steps.</p>
+  <h3>From PowerShell</h3>
+  <p>Open PowerShell in the <b>Akzo-Agent</b> folder (the folder that contains <code>scripts\install.ps1</code>). No downloads happen; files are copied from this folder.</p>
+  <h3>1. Preview</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -DryRun</pre></div>
+  <h3>2. Install (or update)</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1</pre></div>
+  <p>Add <code>-ConfigureVSCode</code> to cut VS Code permission prompts (see <a href="#access">Permissions</a>):</p>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -ConfigureVSCode</pre></div>
+  <p>Writes the agent to both user agent folders, the helper and templates to <code>%USERPROFILE%\.akzo-agent\modules</code>, creates <code>%USERPROFILE%\.akzo-agent\repos.json</code> if it does not exist, and creates the tasks folder where refined PBIs go (it prints the exact path). It validates <code>repos.json</code> and changes it only for <b>Add repository</b> / <code>-AddRepo</code> (backed up first); it stops without changes if the file is not valid JSON. Any file it replaces is backed up first to <code>%USERPROFILE%\.akzo-agent\backups\&lt;timestamp&gt;\</code>. Safe to re-run.</p>
+  <h3>3. Verify the files</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -Verify</pre></div>
+  <p class="muted">Checks installed files against the SHA-256 manifest, checks that no Akzo skill sits in a shared skill folder, and lists registered repositories. It ends with one <code>CHECK [status] name: detail</code> line per item (the setup window shows them). It cannot check the IDE's agent picker; do that in the IDE sections below.</p>
+  <h3>Agent not in the Copilot agent picker</h3>
+  <ol>
+    <li>Run <b>Verify Installation</b> and fix every <b>Failed</b> row; each names its fix.</li>
+    <li><b>VS Code:</b> the agent is read from <code>%USERPROFILE%\.copilot\agents</code> (default of <code>chat.agentFilesLocations</code> in the VS Code builds the check finds). Reload the window, then <b>Ctrl+Shift+P &gt; Configure Custom Agents…</b> lists every agent VS Code found. A user setting that turns <code>~/.copilot/agents</code> off, or <code>chat.disableAIFeatures</code>, hides it.</li>
+    <li><b>Visual Studio:</b> 2022 (17.x) has no custom agents; 2026 reads <code>%USERPROFILE%\.github\agents</code> from 18.5. The <code>.github\agents</code> copy is for Visual Studio only; VS Code reads <code>.github/agents</code> only inside an open workspace.</li>
+    <li>Agents are per user: nothing needs to be installed into each repository. Install as the Windows user who runs the IDE.</li>
+    <li>An organization Copilot policy can turn custom agents off; ask your administrator if the files and settings are verified and the agent is still missing.</li>
+  </ol>
+  <p class="muted"><code>package integrity: NOT VERIFIED - development working copy</code> means the files came from a Git clone or a source download, which has no <code>release-manifest.json</code>. Install from the release zip (<code>release\&lt;version&gt;-rc1\</code>) to have every file checked against the release manifest before anything is written.</p>
+  <p class="muted">Upgrading from 2.x: the second agent <code>akzo-sdd</code> is removed (from the manifest, or when an Akzo agent file of that name is found without one), after a backup. A file of that name with other content is left alone.</p>
+  <p class="muted">If an earlier version put <code>akzo-*</code> skills in <code>%USERPROFILE%\.copilot\skills</code>, the installer backs them up and removes them.</p>
+  <h3>Only one IDE</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -Target VSCode</pre></div>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -Target VisualStudio</pre></div>
+  <p class="muted"><code>-Target</code> describes what should be installed after the run: switching from the default (<code>All</code>) to one IDE removes the other IDE's agent file. Later runs without <code>-Target</code> or <code>-VisualStudioAgentsDir</code> keep your last choice; pass them again to change it. The helper and templates are always installed.</p>
+  <div class="tip">Respect the effective PowerShell execution policy and required script signing. If policy blocks a script, obtain the authorized signing or organizational approval; never bypass policy, change it to run the agent, or work around a declined host prompt.</div>
+  <h3 id="blocked">Blocked or unsigned scripts</h3>
+  <p>Files extracted from a downloaded zip keep Windows' "downloaded from the internet" mark. Under the common <code>RemoteSigned</code> or <code>AllSigned</code> policies PowerShell then refuses the unsigned scripts with "is not digitally signed". The launchers print a note when they see the mark; they never bypass the policy. Choose one of these, as your organization allows:</p>
+  <ol>
+    <li><b>Signed release (preferred where signing is required):</b> use the package your organization signed with its code-signing certificate (<code>Set-AuthenticodeSignature</code> before packaging, as <code>scripts\make-release.ps1</code> describes).</li>
+    <li><b>Verified package under RemoteSigned:</b> first compare <code>Get-FileHash Akzo-SDD-Agent-v&lt;version&gt;.zip -Algorithm SHA256</code> with the value published through a trusted channel, then remove the mark from the <i>zip</i> before extracting: <code>Unblock-File .\Akzo-SDD-Agent-v&lt;version&gt;.zip</code>. Only do this for a package whose hash you verified.</li>
+  </ol>
+  <p class="muted">Under <code>AllSigned</code> only option 1 works. Changing the execution policy to run the agent is not supported.</p>
+</section>
+
+<section id="vscode">
+  <h2>VS Code setup</h2>
+  <ol>
+    <li>Run the installer, then restart VS Code (or run <b>Developer: Reload Window</b>).</li>
+    <li>Open the Chat view. Keep the session target on <b>Local</b> (the default).</li>
+    <li>Open the <b>Agent</b> dropdown and select <b>akzo-master-sdd-v4.2.4</b> (the name shows the installed version). It stays selected until you switch.</li>
+    <li>If you did not install with <code>-ConfigureVSCode</code>, expect the prompts listed in <a href="#access">Permissions</a>.</li>
+  </ol>
+  <p class="muted">VS Code settings change only with <b>Configure VS Code</b> in the setup window (on by default) or <code>-ConfigureVSCode</code>, inside a marked block that Uninstall removes. The default <code>chat.agentFilesLocations</code> already includes <code>~/.copilot/agents</code>. Nothing Akzo-specific appears in the <code>/</code> menu.</p>
+</section>
+
+<section id="vs">
+  <h2>Visual Studio 2026 setup</h2>
+  <ol>
+    <li>Check <b>Help &gt; About</b>: Visual Studio 2026 version <b>18.5 or later</b> (user-level agents arrived in 18.5; 18.4 reads agents only from a repository's <code>.github/agents</code>). Visual Studio 2022 does not support custom agents.</li>
+    <li>If you changed the user agents folder in <b>Tools &gt; Options &gt; GitHub &gt; Copilot</b>, install with that folder:
+      <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -VisualStudioAgentsDir "D:\MyAgents"</pre></div>
+      Replace <code>D:\MyAgents</code> with the folder shown in that options page.</li>
+    <li>Restart Visual Studio and open <b>Copilot Chat</b> (GitHub Copilot badge &gt; Open Chat).</li>
+    <li>Open the agent picker and select <b>akzo-master-sdd-v&lt;version&gt;</b>, or type <code>@akzo-master-sdd-v&lt;version&gt;</code> in the chat input.</li>
+    <li>Open the <b>Tools</b> panel and make sure search, file reading/editing, and terminal tools are enabled. Microsoft documents that tool groups can start disabled for custom agents. The agent needs the terminal for its helper and file reading/editing for the task.</li>
+  </ol>
+</section>
+
+<section id="repos">
+  <h2>Configure reference repositories</h2>
+  <p>Easiest: <b>Install-MasterAgent.cmd &gt; Add repository…</b> (or <code>install.ps1 -AddRepo "C:\src\my-repo"</code>). It adds the clone with its folder name as id and uses an existing spec folder (<code>openspec/changes</code>, <code>src/.github/specs</code>, <code>.github/specs</code>, <code>docs/specs</code>, <code>specs</code>) as <code>specsDir</code>. Or edit <code>%USERPROFILE%\.akzo-agent\repos.json</code> and set <code>path</code> to each local clone. This file stays on your machine; it is never written into any repository.</p>
+  <div class="cmd"><pre>notepad "$env:USERPROFILE\.akzo-agent\repos.json"</pre></div>
+  <p>Each entry has <code>id</code>, <code>path</code>, <code>purpose</code>, <code>stack</code>, <code>notes</code> (hypotheses until verified), <code>commands</code> (build, test, codegen, lint), <code>verified</code> (date and commit), and optionally <code>specsDir</code> (see <a href="#task">Start a task</a>). The agent fills <code>commands</code> once it has actually run them. Check the registry:</p>
+  <div class="cmd"><pre>powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" registry</pre></div>
+  <p><b>Tasks folder:</b> to keep refined PBIs somewhere else, set <code>"tasksDir"</code> at the top of <code>repos.json</code> to an absolute path outside any Git repository (environment variables allowed, e.g. <code>"%USERPROFILE%\\Documents\\Akzo-SDD\\tasks"</code>), then re-run the installer to create it. Empty means the default. <code>install.ps1 -Verify</code> reports a <code>tasksDir</code> that is relative or inside a repository, and duplicate or unusable repo ids.</p>
+  <p class="muted">Opening a folder in the IDE does not make it the target. The agent picks one implementation target from the registry and treats other repositories as read-only references unless you authorize changes there.</p>
+</section>
+
+<section id="security">
+  <h2>Corporate security (G8): authorization and policy</h2>
+  <p>From 3.4.0 the agent does not index, extract documents from, or output content of a repository until that repository is authorized. This is checked by the helper, not only by the agent's instructions. The G8 gate at the end of every task (all modes) is mandatory and cannot be waived.</p>
+  <h3>Developer: authorize a repository</h3>
+  <p>On first use the agent asks whether you hold an authorization to process the repository with this IDE and model, and for its reference and data classification, then records your answer. You can also do it yourself (the IDE asks you to confirm this command; it is never auto-approved):</p>
+  <div class="cmd"><pre>powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" authorize -Repo &lt;repo-id&gt; -Reference "&lt;approval you hold&gt;" -Classification internal -Model "&lt;model in use&gt;" -Hosts "&lt;sonar host&gt;"
+powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" policy -Repo &lt;repo-id&gt;</pre></div>
+  <p>This is your own statement, stored with your user name. G8 reports it as <b>NOT VERIFIED</b>: it is not corporate approval. Restricted data cannot be authorized this way.</p>
+  <h3>Administrator: policy file</h3>
+  <p>A <code>policy.json</code> at <code>%ProgramData%\AkzoAgent\policy.json</code> (or the path in the <code>AKZO_AGENT_MACHINE_POLICY</code> environment variable) is used when it exists; only when there is none, a per-user copy in <code>%USERPROFILE%\.akzo-agent</code> is read. It counts as administrator-managed only when the current user cannot write it, so protect the file with administrator-only write access.</p>
+  <div class="cmd"><pre>{
+  "schemaVersion": 1,
+  "reference": "ISMS-AI-7",
+  "allowDeveloperAttestation": true,
+  "approvedModels": ["Model A"],
+  "allowedHosts": ["sonarqube.example.com"],
+  "defaults": { "classification": "internal", "memory": "allowed", "retentionDays": 180 },
+  "repositories": {
+    "orders-api": { "authorized": true, "reference": "CHG-1234", "classification": "confidential", "memory": "allowed", "retentionDays": 90 },
+    "payroll":    { "authorized": false, "reason": "AI processing not approved" }
+  }
+}</pre></div>
+  <ul>
+    <li><code>authorized: false</code> blocks the repository (<code>BLOCKED_BY_POLICY</code>); an unreadable policy blocks everything (fail closed).</li>
+    <li><code>allowDeveloperAttestation: false</code> means only repositories listed here are processed.</li>
+    <li><code>approvedModels</code>: a model the developer states that is not listed blocks processing. The helper cannot see which model Copilot actually uses; it checks what is stated.</li>
+    <li><code>allowedHosts</code>: the only hosts the helper may call (read-only Sonar queries).</li>
+    <li><code>memory: "disabled"</code> refuses new facts; <code>retentionDays</code> expires facts older than that.</li>
+  </ul>
+  <div class="note"><b>Known limitation: the developer's authorization is not technically protected.</b> It is stored in <code>%USERPROFILE%\.akzo-agent\authorizations.json</code>. Any process running as you, including a model with file-edit or terminal tools, can write that file directly; the <code>authorize</code> command asks the IDE for confirmation, but the helper cannot tell it from a direct write. Your approval is therefore enforced by the IDE's prompts and the agent's instructions, and <b>instructions alone do not enforce approval</b>. Where approval must be enforced, an administrator places a <code>policy.json</code> that users cannot write, with <code>"allowDeveloperAttestation": false</code>: developer statements are then ignored and only the listed repositories are processed. G8 reports a developer statement as NOT VERIFIED in every case.</div>
+  <h3>Commands, gate, report, purge</h3>
+  <ul>
+    <li>The agent runs <code>guard</code> before each non-helper terminal command: <b>ALLOW</b>, <b>NEEDS_APPROVAL</b> (asks you), or <b>BLOCK</b> (never run; no approval releases it). The guard is run by the agent; the IDE cannot force it, so the command log shows what the agent reported.</li>
+    <li><code>security -Id &lt;PBI&gt;</code> evaluates 13 controls and writes <code>&lt;tasks&gt;\&lt;repo&gt;\&lt;PBI&gt;\evidence\corporate-security-report.html</code>. FAIL blocks the handover, NOT VERIFIED allows DONE_WITH_CONCERNS at best, only PASS allows DONE. Never edit the log, the report, or the policy to change an outcome.</li>
+    <li><code>purge -Repo &lt;repo-id&gt; -Confirmed [-IncludeTasks]</code> deletes a repository's memory (and optionally its task folders); the IDE asks you to confirm.</li>
+    <li>Memory and task folders are restricted to your account, SYSTEM, and Administrators. They are not encrypted; keep <code>tasksDir</code> out of synchronized folders.</li>
+  </ul>
+  <p class="muted">Package report with the controls, test evidence, endpoint-protection findings during development, limitations, and required approvals: <code>corporate-security-report.html</code> in the package. Deployment in an organization still needs those approvals.</p>
+</section>
+
+<section id="workflow">
+  <h2>Fresh tasks, branches, modify and resume</h2>
+  <ul>
+    <li><b>Start Development</b>, <b>New Development</b>, or <b>Start Implementation</b> always starts a fresh task: the file dialog for the refined PBI, then the optional dialog for supporting documents. It never resumes the previous PBI. If the dialog cannot open, the agent reports the error and offers a file path or <code>Start-Development.cmd</code> instead; it never skips intake.</li>
+    <li>Use the unambiguous active task for "continue"; only an actually unclear task needs one short free-text question. <code>resume &lt;PBI&gt;</code> and <code>modify &lt;PBI&gt;</code> go straight to that task. Never restart completed work or treat a courtesy reply as gate approval.</li>
+    <li><b>Branch:</b> before repository edits, confirm repository, branch, HEAD, and uncommitted changes. Reuse a valid authorized branch/base decision or ask once in free text which branch to use, recommending a feature branch when needed. Branch creation/switching still respects IDE confirmation and your authorization; switching with uncommitted changes needs agreement. Nothing is stashed, reset, or discarded.</li>
+    <li><b>Specs:</b> one folder per work item, <code>&lt;specsDir&gt;\&lt;id&gt;-&lt;title&gt;\spec.md</code> and <code>plan.md</code>. Another PBI's folder is never reused (<code>SPEC_LOCATION_TAKEN</code>); resuming on a branch that lacks the PBI's spec stops with <code>WRONG_BRANCH</code>.</li>
+    <li><b>Modify:</b> the current spec, plan, PBI, inputs, and statuses are copied to <code>&lt;task&gt;\history\</code> first; then the changed parts go through the gates again.</li>
+    <li><b>Upgrading from 3.4.x:</b> existing tasks resume with their specs and approvals; for tasks without a recorded branch decision the agent reports that and asks before changing code.</li>
+  </ul>
+</section>
+
+<section id="profiles">
+  <h2>Dynamic architecture and optional team profiles</h2>
+  <p>The package has an empty repository registry and no application-specific default profiles. Open your application workspace; the agent discovers its Git root, solutions, projects, frameworks and source patterns. Register additional clones with Add Repository in the existing setup interface. Each selected repository is analyzed independently.</p>
+  <ul>
+    <li>The shared <b>source-grounded development</b> and <b>pre-PR review</b> policies are available without a team profile. Architecture comes from the actual source, not a profile name.</li>
+    <li>Optional team definitions live in <code>profiles-custom\profiles.json</code>. Ambiguous definitions require selection. Unselected profiles are not loaded; repository scope and branch confirmation are required before application writes.</li>
+    <li>Before handover the agent reviews the actual diff against observed patterns and explicitly configured team rules. Missing build, test or Sonar evidence is reported, never called a passing check.</li>
+    <li><b>Your team's own rule files:</b> save them under <code>%USERPROFILE%\.akzo-agent\profiles-custom\</code> and reference them from your profile definitions. Matching relative paths can override packaged generic guides. Upgrades preserve this folder and the repository registry. <code>Install-MasterAgent.cmd</code> &gt; Verify (or <code>install.ps1 -Verify</code>) reports installed and custom files.</li>
+    <li><b>Only what the request needs:</b> <code>profile -Query</code> loads relevant shared and selected team guides; other files are deferred. Semantic indexes are isolated by repository/workspace and versioned inputs. Reuse valid evidence; revalidate changed declarations and consumers.</li>
+    <li><b>Staged tests:</b> <code>affected -Repo &lt;id&gt; [-Base main]</code> identifies relevant builds, focused tests and dependent regression tests independently per repository. Full suites require build-wide changes, demonstrated integration risk or repository policy; agent maintenance never runs unrelated application suites.</li>
+    <li><b>Natural conversation:</b> give a requirement, finding, error, failing test, PR comment or PBI. Ask only necessary decisions. Prefer native selectable controls when supported, numbered choices otherwise. New Chat does not inherit task decisions or approvals; resume must be explicit. Direct fixes need no routine PBI/spec/plan documents. Internal maintenance modifies only identified agent source, with applications kept read-only.</li>
+    <li><b>Why Copilot reads documents you did not ask for (3.8.0):</b> <code>guidance -Repo &lt;id&gt;</code> lists the repository's instruction files, when the IDE adds each one, and every document they tell Copilot to read. <code>copilot-instructions.md</code>, a root <code>AGENTS.md</code> or <code>CLAUDE.md</code>, and <code>applyTo: '**'</code> instructions reach every request of every agent; move document-reading rules into scoped <code>.instructions.md</code> files or skills. The command never edits them.</li>
+    <li><b>Review-only or plan-first requests</b> (<i>"review this and propose a fix before changing anything"</i>) end with the analysis and proposed changes. Nothing is edited until you approve.</li>
+    <li>Chat requests: <i>Implement this requirement</i>, <i>Fix PR comments</i>, <i>Review changes</i>, <i>Run tests</i>. Results are reported as Ready, Ready with Warnings (something could not be verified, for example SonarCloud), or Not Ready.</li>
+  </ul>
+</section>
+
+<section id="memory">
+  <h2>Repository memory, retrieval, and Auto Mode</h2>
+  <ul>
+    <li><b>Memory</b> lives in <code>%USERPROFILE%\.akzo-agent\maps\&lt;repo-id&gt;\</code> (<code>architecture.json</code>, <code>component-index.tsv</code>, <code>symbols.tsv</code>, <code>facts.json</code>, <code>memory-log.tsv</code>). Edits are noticed by content, committed or not; only changed files are re-read. A stale fact must be revalidated before use; facts expire with their evidence. Corrupt files are renamed <code>*.corrupt-&lt;time&gt;</code> and rebuilt.</li>
+    <li><b>Retrieval:</b> <code>context -Query "&lt;terms&gt;" -Mode compact|balanced|deep</code>. Defaults and budgets can be set in <code>repos.json</code>: <code>"retrieval": { "mode": "balanced", "budgets": { "compact": 2500, "balanced": 7000, "deep": 20000 } }</code> (characters). Ranking is deterministic matching; the agent reads the cited lines before relying on a result.</li>
+    <li><b>Architecture analyzer:</b> <code>arch -Repo &lt;repo-id&gt; [-Query "&lt;work's words&gt;"] [-Update]</code> refreshes relevant Roslyn/MSBuild evidence before changes. For several C# symbols use <code>-Queries "Handler;Validator;Service"</code>: one helper launch and content-validated refresh, up to eight queries. Unchanged evidence and caches are reused; signature/deletion changes rebind transitive consumers. Full <code>-Update</code> is for stale or insufficient evidence. Coverage and unresolved links remain explicit. Design-time MSBuild may write normal <code>obj</code> intermediates.</li>
+    <li><b>Local runtime dependency closure:</b> Roslyn 5.3.0/MSBuildLocator 1.11.2 select compatible installed SDK/Visual Studio toolsets for the <code>net8.0</code>/<code>net472</code> hosts. Matching installed runtime dependencies are staged only into the local runtime cache under the Roslyn map; shipped hosts and Visual Studio files are not patched. SHA-256 content fingerprints of the selected dependency closure and analyzer/host inputs invalidate stale runtime cache evidence after in-place toolset changes. No install/runtime downloads; an offline analyzer build requires approved dependencies already in the local package cache.</li>
+    <li><b>Auto Mode:</b> <code>implement PBI 305912 in Auto Mode</code> runs the whole PBI inside the scope you authorize (recorded in plan section 0). It stops for business ambiguity, destructive or production actions, permission or credential changes, new dependencies, and anything outside the scope. G8, the command guard, and the IDE's own confirmation prompts still apply.</li>
+    <li><b>Upgrading from 3.3.0:</b> run <b>Install / Upgrade</b>. Each repository is authorized once (the agent asks); the old index is rebuilt on first use; tasks, <code>repos.json</code>, and notes are kept. Roll back by installing the previous zip over this one; replaced files are in <code>%USERPROFILE%\.akzo-agent\backups\</code>.</li>
+    <li><b>Release packages</b> contain <code>release-manifest.json</code>; the installer refuses a package with a changed, missing, or unlisted file. Compare the zip's SHA-256 with the value you received from the publisher (<code>Get-FileHash &lt;zip&gt; -Algorithm SHA256</code>). The hash proves the file is unchanged; it does not show who built or approved it.</li>
+  </ul>
+</section>
+
+<section id="sonar">
+  <h2>SonarQube and code rules</h2>
+  <p>The agent holds changed code to the project's Sonar quality gate and rules (agent section 6a). It uses the strongest source available and names it in the plan's Sonar table:</p>
+  <ol>
+    <li><b>SonarQube MCP tools in Copilot Chat</b>, when you have added a SonarQube MCP server to the IDE.</li>
+    <li><b>Read-only server queries through the helper</b> (quality gate, issues, hotspots, coverage, duplication, rule details), when the repository has a project key and a server is reachable with a token.</li>
+    <li><b>Sonar analyzers in the build or lint run</b> (for example a Sonar analyzer package for C#, or the Sonar ESLint plugin), when the repository references them.</li>
+    <li><b>SonarQube for IDE</b> diagnostics: in Visual Studio the helper reads the Error List itself (<code>sonar -Check issues</code>, below); in VS Code the agent reads the problems list.</li>
+    <li>Otherwise a static review against the agent's code rules, reported as "not a Sonar analysis".</li>
+  </ol>
+  <p><b>Server queries:</b> the project key comes from <code>sonar-project.properties</code> (<code>sonar.projectKey</code>) or the pipeline's Sonar step. Set the server and a personal token as user environment variables, then restart the IDE so Copilot's terminal sees them:</p>
+  <div class="cmd"><pre>[Environment]::SetEnvironmentVariable('SONAR_HOST_URL', 'https://sonarqube.example.com', 'User')   # SonarQube Cloud: https://sonarcloud.io (default when sonar.organization is set)
+[Environment]::SetEnvironmentVariable('SONAR_TOKEN', '&lt;your token&gt;', 'User')</pre></div>
+  <p>The server must use <b>https</b> (a loopback address such as localhost is exempt, for local testing); the helper refuses plain http to any other host before sending anything (<code>INSECURE_HOST</code>) and never follows a redirect. The host must also be allowed by the policy or your recorded authorization (<code>HOST_NOT_ALLOWED</code>). The helper reads the token itself and sends it only in the request header, so it never appears in chat or on a command line. The agent never asks for, prints, or stores a token. Check what was detected:</p>
+  <div class="cmd"><pre>powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" sonar -Repo &lt;repo-id&gt;
+powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" sonar -Repo &lt;repo-id&gt; -Check gate</pre></div>
+  <p><b>Gate for new code:</b> the project's gate from the server, then the repository's configured threshold. Without either, coverage of changed lines has a provisional 85% objective, not an organizational requirement. Other stated defaults are 0 new issues, every new security hotspot listed for your review, and duplicated lines in new code of at most 3%. Coverage comes from the repository's actual coverage tool and reports, not AI review.</p>
+  <p><b>Findings without asking for the rule (<code>get_sonar_issues</code>):</b> keep Visual Studio open with the repository's solution. The helper reads its Error List through the IDE's automation interface, adds the last logged build and the server, and returns each finding's rule, message, file, line, column, severity, and source. With <code>-Update</code> it first opens the files, saves them, and waits up to 30 seconds for the analysis; your active document and Error List filters stay as they were. The IDE's interface has no rule ids, so a rule comes from the build or the server; findings shown only in the SonarQube Report window cannot be read. Try it:</p>
+  <div class="cmd"><pre>powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" sonar -Repo &lt;repo-id&gt; -Check issues -File "&lt;path&gt;\&lt;File&gt;.cs" -Update</pre></div>
+  <p><b>Findings mapped to code:</b> after <code>arch -Repo &lt;repo-id&gt;</code> has built the architecture index once, each finding names the method or type that holds it (<code>symbol</code>) and links the rule's documentation (<code>help</code>).</p>
+  <p class="muted">Server results describe the last analysis uploaded for the branch, not your uncommitted edits; the agent uses them for the baseline, thresholds, and rule details. It never uploads an analysis (scanner run) unless you ask, never adds suppressions, <code>// NOSONAR</code>, or exclusions, and asks before adding an analyzer package.</p>
+</section>
+
+<section id="quick">
+  <h2>Quick start: Start Development</h2>
+  <ol>
+    <li>In Copilot Chat select <b>akzo-master-sdd-v&lt;version&gt;</b> and send:
+      <div class="cmd"><pre>Start Development</pre></div></li>
+    <li>A Windows file dialog opens (look behind the IDE window if you do not see it). Choose the refined PBI: <code>.md</code>, <code>.txt</code>, or <code>.docx</code>; <code>.pdf</code> needs <code>pdftotext</code> (Poppler) on PATH. The file is converted to <code>%USERPROFILE%\.akzo-agent\inbox\&lt;file name&gt;\refined-pbi.md</code>; the original is kept under <code>source\</code> and never changed.</li>
+    <li>A second dialog opens: select any number of <b>supporting documents</b> at once (Ctrl+click), or Cancel for none. They are copied to <code>supporting\</code> beside the PBI; your originals are never changed, duplicates are detected, and a second file with the same name is kept as <code>name-2</code>. Readable: Markdown, text, JSON, YAML, XML, CSV, code, <code>.docx</code>, <code>.xlsx</code>, <code>.pdf</code> (with <code>pdftotext</code>); images and other formats are listed but not read.</li>
+    <li>The agent reads the PBI number and title from the document and picks the repository (the open workspace, or the only one registered). When all three are clear it starts at once; otherwise it asks one question batch with the answers pre-selected.</li>
+    <li>It copies everything to <code>&lt;tasks&gt;\&lt;repo-id&gt;\&lt;PBI number&gt;\</code>, uses the repository's architecture index, and maps every requirement to existing code (EXISTING / REUSABLE / EXTEND / NEW / UNKNOWN). It then <b>stops three times for your approval</b>: after the gap map, after <code>spec.md</code>, and after <code>plan.md</code> (in the repository's spec folder as <code>&lt;TitleInPascalCase&gt;\</code>, or beside the PBI). Each stop is shown by name with what you are deciding, and you choose <b>Approve</b>, <b>Request changes</b>, or <b>Custom response</b> (typing <code>approve</code> or <code>approve all</code> still works; see <a href="#gates">Gates and progress</a>). After plan approval it implements test first, builds, tests, runs analyzers/Sonar, fixes, and reports.</li>
+  </ol>
+  <p><b>Without the chat command:</b> double-click <b>Start-Development.cmd</b> (the same two dialogs), then type <code>start</code> in Copilot Chat (it is on the clipboard). You can also drop files or folders (PBI plus notes) in the inbox yourself and type <code>start</code>. Add documents to a running task with <code>attach &lt;files&gt; to &lt;PBI&gt;</code>; type <code>develop &lt;PBI&gt; end to end</code> to run without the approval stops.</p>
+  <p class="muted"><b>Approval limits:</b> the gates are enforced by the agent's instructions and the statuses recorded in <code>spec.md</code> and <code>plan.md</code>. Copilot offers no hook that blocks file edits, so the IDE cannot technically stop a model error or an explicit instruction from skipping a gate.</p>
+  <p class="muted">The agent states its version in its first reply. <code>install.ps1 -Verify</code> shows the installed version and the version in your Akzo-Agent folder.</p>
+</section>
+
+<section id="task">
+  <h2 id="gates">Gates and progress (3.10.0)</h2>
+  <p>You never need to type a gate or task id. The agent names each stop and each task in words; the ids stay in files and logs.</p>
+  <div class="wrap"><table>
+    <thead><tr><th>Stop</th><th>What you decide</th><th>Internal id</th></tr></thead>
+    <tbody>
+      <tr><td>Requirement Clarification</td><td>Answers to the questions the PBI leaves open</td><td>G1</td></tr>
+      <tr><td>Existing Code Analysis &amp; Gap Assessment</td><td>Whether each requirement is mapped to the right existing code (EXISTING / REUSABLE / EXTEND / NEW / UNKNOWN)</td><td>G2</td></tr>
+      <tr><td>Technical Specification Review</td><td>Business rules, acceptance criteria, contract changes, open questions in <code>spec.md</code></td><td>G3</td></tr>
+      <tr><td>Implementation Plan Approval</td><td>The named tasks and the files each one changes in <code>plan.md</code>; no source file is edited before this</td><td>G4</td></tr>
+      <tr><td>Build, Test &amp; Quality Verification</td><td>The verification report: what passed, failed, or was not verified</td><td>G5</td></tr>
+      <tr><td>Corporate Security Check</td><td>Every FAIL and NOT VERIFIED control; never corporate approval</td><td>G8</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><b>Free-text gate decisions:</b> the agent presents the deliverable and asks once for explicit approval or changes; respond naturally. No routine picker, numbered options, or repeating an unchanged approval request. "approve" or an equally clear approval of this deliverable continues; "approve all remaining gates" authorizes Auto Mode within scope. "ok", "thanks", "continue", or a question alone does not approve a gate. Valid recorded approvals are reused, not asked again. PBI gates, security authorization, and IDE/host prompts remain intact.</li>
+    <li><b>Approval history:</b> each decision is appended to <code>&lt;tasks&gt;\&lt;repo&gt;\&lt;PBI&gt;\approvals.jsonl</code> with the stop's name, your choice and words (secrets redacted), your user name, the time, and the SHA-256 of the document you decided on. A stop cannot be approved twice, before the stop before it, or after you asked for changes until the revised version is shown.</li>
+    <li><b>Task progress</b> uses the task titles from <code>plan.md</code> and these statuses: Not Started, In Progress, Implemented - Verification Pending, Blocked, Verified (its build and tests ran and passed), Completed (the final checks passed). Plans written before 3.10.0 (<code>todo</code> / <code>done</code>) are read the same way. Stop names and explanations can be edited in <code>modules\plan\assets\workflow.json</code>.</li>
+  </ul>
+
+  <h2>Start a task from a refined PBI (manual)</h2>
+  <p>Put each refined PBI in its own folder under the tasks folder. The folder names tell the agent the target repository and the PBI ID:</p>
+  <div class="cmd"><pre>&lt;tasks folder&gt;\&lt;repo-id&gt;\&lt;PBI-ID&gt;\refined-pbi.md</pre></div>
+  <ul>
+    <li><b>Tasks folder:</b> <code>%USERPROFILE%\.akzo-agent\tasks</code> by default. The portable installer resolves the current user's profile and prints the path; you can also print it with:
+      <div class="cmd"><pre>(powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" home | ConvertFrom-Json).tasks</pre></div></li>
+    <li><b>repo-id:</b> an <code>id</code> from <code>repos.json</code>, for example <code>backend-functions</code>. Do not skip this folder level.</li>
+    <li><b>PBI-ID:</b> letters, digits, <code>.</code>, <code>_</code> or <code>-</code>, for example <code>PBI-12345</code> or <code>305912</code>.</li>
+    <li><b>File name:</b> <code>refined-pbi.md</code> (letter case does not matter). Include the acceptance criteria and, if you have them, the implementation steps.</li>
+    <li><b>Other files</b> in the same folder or its subfolders (request notes, decision log, open questions, evidence, handover documents) are read as supporting input. The agent never edits them; if they conflict with <code>refined-pbi.md</code>, the PBI wins and the conflict becomes a question.</li>
+  </ul>
+  <h3>Create the task</h3>
+  <div class="cmd"><pre>$task = "$env:USERPROFILE\.akzo-agent\tasks\backend-functions\PBI-12345"
+New-Item -ItemType Directory -Force $task | Out-Null
+notepad "$task\refined-pbi.md"</pre></div>
+  <p class="muted">Paste the refined PBI into Notepad and save. To move an existing folder of notes: <code>Copy-Item "C:\path\to\305912\*" "$task" -Recurse</code>.</p>
+  <h3>Spec and plan inside the repository (e.g. src\.github\specs)</h3>
+  <p>Set <code>specsDir</code> on the repository in <code>repos.json</code>, relative to the repository root:</p>
+  <div class="cmd"><pre>"id": "warehouse", "path": "C:\\work\\warehouse", "specsDir": "src/.github/specs",</pre></div>
+  <p>The agent then writes <code>&lt;repo&gt;\src\.github\specs\&lt;Feature&gt;\spec.md</code> and <code>plan.md</code>, for example <code>warehouse\src\.github\specs\CreateCatalogRequest\</code>. On the first run it picks the PascalCase feature name from the PBI title; the location is remembered in the task folder (<code>task.json</code>) so explicit resume finds it. These files appear in Git Changes; committing still requires authorization. <code>refined-pbi.md</code>, inputs, and evidence stay in the task folder. Without <code>specsDir</code>, spec and plan sit beside <code>refined-pbi.md</code>.</p>
+  <h3>Check it before you start (optional)</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File "$env:USERPROFILE\.akzo-agent\modules\investigate\scripts\akzo.ps1" task -Id PBI-12345</pre></div>
+  <p class="muted"><code>"status": "READY"</code> means the agent will find it. The output also shows the Git state, the input files, and the repository skills and instructions the agent will consider (<code>repoGuidance</code>).</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Helper status</th><th>Meaning</th><th>What the agent does</th></tr></thead>
+    <tbody>
+      <tr><td><code>READY</code></td><td>Found the file and a registered repository</td><td>Reads it and the inputs, continues</td></tr>
+      <tr><td><code>NEEDS_FEATURE</code></td><td>The repository has <code>specsDir</code>; no feature folder chosen yet</td><td>Names the folder from the PBI title and reruns the helper</td></tr>
+      <tr><td><code>NOT_FOUND</code></td><td>No <code>&lt;repo-id&gt;\&lt;PBI-ID&gt;</code> folder</td><td>Shows you the expected path; or, if you pasted the PBI in chat, asks for the repo and saves it as <code>refined-pbi.md</code></td></tr>
+      <tr><td><code>NO_REFINED_PBI</code></td><td>Folder exists, file missing</td><td>Asks for the PBI (or saves the text you pasted, unchanged)</td></tr>
+      <tr><td><code>AMBIGUOUS</code></td><td>The same PBI ID under two repository folders</td><td>Asks one question with both as options; creates nothing</td></tr>
+      <tr><td><code>NEEDS_REPO</code>, <code>UNKNOWN_REPO</code></td><td>File outside the layout, or folder name not in <code>repos.json</code></td><td>Asks which registered repository is the target</td></tr>
+    </tbody>
+  </table></div>
+  <h3>What the agent does with it</h3>
+  <ul>
+    <li><b>Repository skills and instructions:</b> it reads the ones in the target repository (root and one level down, e.g. <code>src\.github\skills</code>, <code>.github\instructions</code>, <code>copilot-instructions.md</code>, <code>AGENTS.md</code>) that match the task, follows them as the project's conventions, and lists them in spec §8.</li>
+    <li><b>Reference implementation:</b> when the PBI or inputs say the behavior already exists (e.g. done for CDMS, now needed for DAB through GraphQL), it finds that code and its tests first, maps it file by file in spec §6 (same / adapted / not applicable), and mirrors it while keeping DAB/GraphQL semantics. For GraphQL it edits the <code>.graphql</code> documents and regenerates the client.</li>
+    <li><b>PBI steps:</b> if <code>refined-pbi.md</code> lists implementation steps, the plan follows them in order and records any deviation.</li>
+    <li><b>Requirement check:</b> missing inputs and contradicting acceptance criteria become questions before implementation.</li>
+    <li><b>Changes to the PBI:</b> after the spec is written it saves <code>refined-pbi.baseline.md</code>. If you edit <code>refined-pbi.md</code> later, the next run diffs it, updates the affected spec and plan parts, and asks if finished code contradicts it.</li>
+    <li><b>Resume:</b> existing <code>spec.md</code> and <code>plan.md</code> are never overwritten; plan §0 records where to continue.</li>
+  </ul>
+</section>
+
+<section id="use">
+  <h2>Prompts</h2>
+  <p>Select <b>akzo-master-sdd</b> in the Copilot Chat agent picker first. The agent finds the folder from the ID; give the full path only if the file is outside the tasks layout.</p>
+  <h3>Spec → plan → implementation (end to end)</h3>
+  <div class="cmd"><pre>Develop PBI-12345 end to end. Do not commit.</pre></div>
+  <h3>Planning only</h3>
+  <div class="cmd"><pre>Plan PBI-12345 and stop for my approval. No source changes.</pre></div>
+  <h3>Approve a plan and implement</h3>
+  <div class="cmd"><pre>The plan for PBI-12345 is approved. Implement it end to end. Do not commit.</pre></div>
+  <h3>Resume</h3>
+  <div class="cmd"><pre>Resume PBI-12345.</pre></div>
+  <h3>Review and fix an existing implementation (Align)</h3>
+  <div class="cmd"><pre>Review and align 305912 with the existing architecture. Fix confirmed issues and validate. Do not commit.</pre></div>
+  <p class="muted">The agent compares the current changes with 2-4 sibling features (naming, structure, GraphQL reuse, DI, error handling, tests), fixes confirmed deviations, builds, runs the tests, and reports what was fixed, verified, and left open.</p>
+  <h3>How accuracy is enforced</h3>
+  <ul>
+    <li><b>Sibling features first:</b> before the spec, the agent reads the closest existing features end to end and fills a conventions table (folders, namespaces, commands/queries/handlers/validators, services, DTOs, constants, resource keys, GraphQL operations and generated types, DI, tests). Every new name in the plan cites the sibling it copies.</li>
+    <li><b>GraphQL reuse:</b> existing queries and mutations are searched and reused before new ones are added; the client is regenerated with the repository's command and the generated types are checked.</li>
+    <li><b>Integration check:</b> before handover, new files must be referenced, registered in DI, reached from their endpoint, and free of new nullable or analyzer warnings; sibling feature tests are run when shared code changed.</li>
+    <li><b>Actual final verification:</b> build, required tests, Sonar/analyzer source, changed-line coverage, layer/dependency direction, DI lifetime/reachability, and complete diff checks. No AI-only PASS; give decisive source references, reused symbols, new-class justification, and exact blockers. Source fallback leaves unresolved semantic links UNVERIFIED. No speculative GraphQL/Dataverse contracts or hand-edited generated files; an actual authorized UI repository is required for UI work, never an invented profile.</li>
+    <li><b>No invented rules:</b> unclear business decisions are listed and asked once; everything that does not depend on them is built.</li>
+    <li><b>Continuous:</b> once implementation starts, the agent keeps going task by task until handover; failures are fixed, not reported as a stopping point.</li>
+  </ul>
+  <h3>File outside the tasks layout</h3>
+  <div class="cmd"><pre>Develop 305912 end to end from C:\path\to\305912\refined-pbi.md in repository colordms. Do not commit.</pre></div>
+  <h3>Questions you will get</h3>
+  <p>Only genuinely unresolved decisions are asked after consulting source evidence and valid same-task answers. Finite choices use the host's supported single/multi-select controls, with an explained recommendation and safe preselection when supported. Custom answers remain possible. Approval/security/install/deployment decisions are never preselected. Previous/Next and widget shape depend on the host; cancellation never authorizes work. Returned answers continue the authorized workflow without repeated questions.</p>
+  <p><b>Host limits:</b> native Visual Studio Chat radio buttons/navigation are NOT VERIFIED. The optional installed <code>modules\interaction\scripts\select.ps1</code> is a native Windows Forms modal wizard with radio/checkbox choices, Custom Answer, Previous/Next/Submit/Cancel and task-tagged JSON results. It is not a native Chat renderer or HTML dialog. Without supported UI, use numbered choices and Cancel. No extension is installed. New Chat inherits no task choice or approval.</p>
+  <p><b>Release:</b> verify <code>Akzo-SDD-Agent-v4.2.4.zip</code> using its adjacent SHA-256 file and read its release notes for exact tests/blockers. Extract to a short folder, then run <code>Install-MasterAgent.cmd</code>. Browse opens the Windows Shell Explorer-style folder picker; pasted paths, standard navigation, cancellation and native PBI/supporting-file multi-selection remain supported. Upgrades preserve personal registrations, custom profiles, tasks and architecture caches. Respect execution policy and required corporate signing; never bypass them.</p>
+  <h3>Where the results appear</h3>
+  <ul>
+    <li><b>Code changes:</b> in the target repository, visible in Git Changes / Source Control, uncommitted.</li>
+    <li><b>Spec and plan:</b> <code>&lt;repo&gt;\&lt;specsDir&gt;\&lt;Feature&gt;\</code> when <code>specsDir</code> is set, else the task folder.</li>
+    <li><b>Progress:</b> <code>plan.md</code> §0 (start state, remaining) and §2 (task status).</li>
+    <li><b>Validation results:</b> <code>plan.md</code> §4 and §6 (command, result, counts), with logs and coverage reports in the task's <code>evidence\</code> folder. The final handover in chat lists the same paths.</li>
+  </ul>
+  <p class="muted">A worked hypothetical example is in <code>examples\DEMO-101-gloss-measurement-range\</code>.</p>
+</section>
+
+<section id="access">
+  <h2>Permissions</h2>
+  <p>Copilot asks before an agent reads or edits files outside your workspace and before terminal commands. The agent keeps reads bounded: short always-on policy, PBI procedure only for PBI work, and named engineering/profile guides only when relevant. One helper call starts or resumes a task; security and host approvals are never bypassed.</p>
+  <h3>VS Code: one-time setup</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -ConfigureVSCode</pre></div>
+  <p>Adds a marked block at the top of your VS Code user <code>settings.json</code> (backed up first, kept up to date on reruns, removed by <code>-Uninstall</code>; your comments and other settings are left as they are):</p>
+  <ul>
+    <li><code>chat.tools.terminal.autoApprove</code>: one rule for the policy-respecting helper form <code>powershell -NoProfile -File "&lt;your profile&gt;\.akzo-agent\modules\investigate\scripts\akzo.ps1" &lt;command&gt; ...</code>, only with approved host configuration. Command lines with <code>;</code>, <code>|</code>, <code>&amp;</code>, <code>$</code>, backticks, or redirection, and any other script, still ask. This never grants signing, execution-policy, or corporate approval.</li>
+    <li><code>github.copilot.chat.additionalReadAccessPaths</code>: <code>%USERPROFILE%\.akzo-agent</code> and the tasks folder, so the refined PBI and inputs are read without asking. This applies to every Copilot agent, read-only.</li>
+    <li><code>chat.agent.maxRequests</code>: 400. VS Code otherwise pauses any agent with <b>Continue to iterate?</b> after 50 requests (default confirmed in VS Code 1.142.0), which interrupts a full implementation. This is a limit for all agents, not a behavior change.
+  </ul>
+  <p class="muted">If either setting already exists in your <code>settings.json</code>, the installer leaves it alone and prints a warning; merge the entry yourself.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Prompt</th><th>After setup</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Reading workflow files</td><td>Lazy-loaded only for the relevant mode/topic; normal host file-access rules apply</td><td>Live prompt behavior not verified by static instruction checks</td></tr>
+      <tr><td>Running the helper</td><td>Auto-approved by the rule</td><td>Rule tested against allowed and chained commands in test.ps1; <span class="warn">not yet observed live</span></td></tr>
+      <tr><td>Reading refined-pbi.md and inputs</td><td>No prompt (read allowlist)</td><td>Setting confirmed in VS Code 1.142.0 source; <span class="warn">not yet observed live</span></td></tr>
+      <tr><td>Editing spec.md / plan.md</td><td>No prompt when <code>specsDir</code> puts them in the repository you opened. Outside the workspace VS Code always asks <b>Allow edits?</b> (no setting removes it); add the tasks folder with <b>File &gt; Add Folder to Workspace…</b> to avoid it.</td><td>Confirmed in source; <span class="warn">not yet observed live</span></td></tr>
+      <tr><td><code>dotnet build</code>, <code>dotnet test</code>, <code>npm</code>, <code>git diff</code></td><td>Normal approval; choose <b>Always allow</b> for a command you trust</td><td>VS Code behavior</td></tr>
+      <tr><td><b>Continue to iterate?</b> mid-implementation</td><td>Gone up to 400 requests; the agent also keeps plan section 0 current so <code>Resume &lt;PBI&gt;</code> continues exactly where it stopped</td><td>Setting confirmed in source; <span class="warn">not yet observed live</span></td></tr>
+    </tbody>
+  </table></div>
+  <h3>Visual Studio 2026</h3>
+  <p>Visual Studio does not document equivalent permission settings. Approve helper/file access only through the permitted host process; conversational questions use short free text, not a required numbered picker. Live IDE prompt behavior is <span class="warn">NOT VERIFIED</span> by instruction checks.</p>
+</section>
+
+<section id="storage">
+  <h2>Where things are stored</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Item</th><th>Location</th></tr></thead>
+    <tbody>
+      <tr><td>Task folder (refined-pbi.md, your input files, refined-pbi.baseline.md, task.json, evidence\; spec.md and plan.md when the repo has no <code>specsDir</code>)</td><td><code>%USERPROFILE%\.akzo-agent\tasks\&lt;repo-id&gt;\&lt;PBI-ID&gt;\</code> (base folder set by <code>tasksDir</code> in <code>repos.json</code>)</td></tr>
+      <tr><td>spec.md, plan.md (repo mode)</td><td><code>&lt;repo&gt;\specs\&lt;PBI-ID&gt;\</code>; the rest stays in the task folder</td></tr>
+      <tr><td>Registry</td><td><code>%USERPROFILE%\.akzo-agent\repos.json</code></td></tr>
+      <tr><td>spec.md, plan.md with <code>specsDir</code></td><td><code>&lt;repo&gt;\&lt;specsDir&gt;\&lt;Feature&gt;\</code>, e.g. <code>src\.github\specs\ImitationRequestPaintSystem\</code></td></tr>
+      <tr><td>Helper and templates</td><td><code>%USERPROFILE%\.akzo-agent\modules\</code></td></tr>
+      <tr><td>Repository notes (unverified hints from earlier versions)</td><td><code>%USERPROFILE%\.akzo-agent\maps\&lt;repo-id&gt;.md</code></td></tr>
+      <tr><td>Repository memory (index, symbols, verified facts, log)</td><td><code>%USERPROFILE%\.akzo-agent\maps\&lt;repo-id&gt;\</code> (owner-only access)</td></tr>
+      <tr><td>Authorizations you recorded, user policy</td><td><code>%USERPROFILE%\.akzo-agent\authorizations.json</code>, <code>...\policy.json</code></td></tr>
+      <tr><td>Administrator policy</td><td><code>%ProgramData%\AkzoAgent\policy.json</code> (or <code>AKZO_AGENT_MACHINE_POLICY</code>)</td></tr>
+      <tr><td>Command log and security report of a task</td><td><code>&lt;tasks&gt;\&lt;repo-id&gt;\&lt;PBI&gt;\evidence\commands.tsv</code>, <code>...\corporate-security-report.html</code></td></tr>
+      <tr><td>Optional code graphs</td><td><code>%USERPROFILE%\.akzo-agent\graphs\&lt;repo-id&gt;\</code></td></tr>
+      <tr><td>Installer manifest and backups</td><td><code>%USERPROFILE%\.akzo-agent\install-manifest.json</code>, <code>...\backups\</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="git">
+  <h2>What appears in Git Changes</h2>
+  <ul>
+    <li><b>Installing, updating, uninstalling:</b> nothing in any target repository. The installer compares HEAD and <code>git status</code> of every registered repository before and after, and fails if anything changed.</li>
+    <li><b>Planning without <code>specsDir</code>:</b> nothing. refined-pbi.md, inputs, spec, plan, and evidence live in the tasks folder. The helper refuses a task folder inside a Git repository.</li>
+    <li><b>With <code>specsDir</code>:</b> a new untracked <code>&lt;specsDir&gt;\&lt;Feature&gt;\</code> folder with <code>spec.md</code> and <code>plan.md</code>, meant to be committed.</li>
+    <li><b>Repo mode:</b> a new untracked <code>specs\&lt;PBI-ID&gt;\</code> folder with <code>spec.md</code> and <code>plan.md</code>.</li>
+    <li><b>Implementation:</b> every edited file shows as modified or added, including regenerated GraphQL clients. Nothing is hidden with ignore rules, <code>skip-worktree</code>, or <code>assume-unchanged</code>.</li>
+    <li><b>Your own uncommitted work</b> stays as it was; the agent records it before editing and never stashes, resets, or reverts it.</li>
+    <li>The agent does not commit, push, merge, or deploy unless you ask.</li>
+    <li>Changes to the agent itself appear only in the <b>Akzo-Agent</b> repository.</li>
+  </ul>
+</section>
+
+<section id="update">
+  <h2>Update and uninstall</h2>
+  <h3>Update</h3>
+  <p>Get the latest Akzo-Agent files, then double-click <b>Install-MasterAgent.cmd</b> &gt; <b>Install / Upgrade</b> (or re-run the installer). Unchanged files are skipped; replaced and removed files are backed up. Upgrading keeps <code>repos.json</code>, authorizations, tasks, repository memory, and <code>profiles-custom</code>. From 3.6.0 to 3.7.0 nothing needs re-authorizing or re-indexing. The first call per repository builds the profile cache. If you customized a profile file, compare it with the shipped 3.7.0 version (new sections in the shared skills and the DAB/CDMS architecture skills).</p>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1</pre></div>
+  <h3>Uninstall</h3>
+  <p>Double-click <b>Uninstall-MasterAgent.cmd</b> and confirm, or use the commands below. Removes the agent files, helper, and templates recorded in the install manifest (backing up any you edited) and the VS Code settings block added by <code>-ConfigureVSCode</code>. Keeps <code>repos.json</code>, tasks, maps, graphs, and backups.</p>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -Uninstall -DryRun</pre></div>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\install.ps1 -Uninstall</pre></div>
+  <h3>Self-test (maintainers)</h3>
+  <div class="cmd"><pre>powershell -NoProfile -File .\scripts\test.ps1</pre></div>
+  <p class="muted">Runs in a temporary profile and checks that your real profile is untouched. <code>scripts\test-gui.ps1</code> drives the real file dialog, setup window, and uninstall confirmation through the <code>.cmd</code> launchers (needs a desktop session). <code>scripts\test-ide.ps1</code> starts Visual Studio 2022 or 2026 with a temporary solution and checks <code>sonar -Check issues -Update</code> against its real Error List (close other Visual Studio instances first).</p>
+</section>
+
+<section id="trouble">
+  <h2>Troubleshooting</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Symptom</th><th>Check</th></tr></thead>
+    <tbody>
+      <tr><td>akzo-master-sdd missing from the picker</td><td>Run <code>install.ps1 -Verify</code>; restart the IDE. VS Code: session target <b>Local</b>, and <code>chat.agentFilesLocations</code> still includes <code>~/.copilot/agents</code>. Visual Studio: 2026 version 18.5+ (<code>install.ps1 -Verify</code> warns otherwise), and the user agents folder in Tools &gt; Options &gt; GitHub &gt; Copilot matches the install folder.</td></tr>
+      <tr><td>Another agent (or plain Copilot) follows the Akzo workflow</td><td>Start a new chat (history carries over when you switch agents). Run <b>Verify</b>: <code>LEAK</code> lines name Copilot memory files that mention Akzo; <b>Repair</b> removes them (backed up), or run <i>Chat: Clear All Memory Files</i> in VS Code. <code>DUPLICATE</code> lines name an older Akzo agent; Install migrates it. Also check the repository's own <code>.github/copilot-instructions.md</code> and <code>AGENTS.md</code>, which apply to every agent.</td></tr>
+      <tr><td><code>NEEDS_AUTHORIZATION</code> or <code>BLOCKED_BY_POLICY</code></td><td>Run <code>akzo.ps1 policy -Repo &lt;id&gt;</code> for the reason. <code>NEEDS_AUTHORIZATION</code>: record the authorization you hold (<a href="#security">Security</a>). <code>BLOCKED_BY_POLICY</code>: the policy forbids processing, names an unapproved model, or is unreadable; ask your administrator, and do not work around it.</td></tr>
+      <tr><td>G8 outcome <b>NOT VERIFIED</b> or <b>FAIL</b></td><td>Open <code>evidence\corporate-security-report.html</code> in the task folder: every control lists its evidence and what is missing. FAIL: fix the finding (remove the secret, suppression, or unapproved dependency) and rerun <code>security</code>. NOT VERIFIED: provide the missing approval or evidence; a developer statement and passing tests never turn it into PASS.</td></tr>
+      <tr><td><code>guard</code> reports an error</td><td>Treat the command as blocked. Inner double quotes break under Windows PowerShell 5.1; use single quotes inside the checked command.</td></tr>
+      <tr><td>Scripts blocked by antivirus ("malicious content")</td><td>Do not disable protection or add exclusions yourself. Report it to your endpoint-security team with the script name; they decide on allow-listing by publisher or hash. During development this happened once when a deny list spelled out attack-tool names; the shipped guard works by category instead (see the package report).</td></tr>
+      <tr><td>Sonar results say <code>INSECURE_HOST</code> or <code>HOST_NOT_ALLOWED</code></td><td>Use an https server address, and make sure the host is listed in the policy (<code>allowedHosts</code>) or in your authorization (<code>-Hosts</code>). Do not work around either.</td></tr>
+      <tr><td>Sonar results say <code>NO_SERVER</code> or "not a Sonar analysis"</td><td>Run <code>akzo.ps1 sonar -Repo &lt;id&gt;</code>: it lists what is missing (project key, <code>SONAR_HOST_URL</code>, <code>SONAR_TOKEN</code>). After setting environment variables, restart the IDE. <code>SONAR_ERROR</code> with 401: token invalid or expired; 403: no Browse permission on the project; 404 with a branch: the server may analyze only the main branch.</td></tr>
+      <tr><td><code>arch</code> says <code>UNAVAILABLE</code>, or a project is <code>partial</code> or <code>syntax</code></td><td>Read the exact host/toolset and <code>loadErrors</code> blocker. The dual Roslyn 5.3.0 hosts need a compatible installed SDK or Visual Studio MSBuild runtime closure; a stale cache is invalidated by SHA-256 dependency content fingerprints. Missing packages/SDK/reference assemblies require approved local setup or authorized restore, not a bypass or speculative code. Continue bounded source reads only where authorization permits and mark unresolved semantic links UNVERIFIED. <code>install.ps1 -Verify</code> reports detected installation evidence, not application build/test success.</td></tr>
+      <tr><td><code>sonar -Check issues</code>: the <code>ide</code> source is <code>UNAVAILABLE</code></td><td>Its <code>detail</code> says why. Open the repository's solution in Visual Studio 2022 or 2026. Run Visual Studio and the IDE terminal as the same user, both elevated or neither. With several instances of one version open, close the others; the helper reaches the one Windows registered first. "ConstrainedLanguage mode" means an organizational policy blocks the automation interface: ask your administrator, do not work around it. In VS Code this source is not available; the agent reads the problems list.</td></tr>
+      <tr><td>"Start Development" shows no file dialog</td><td>Look behind the IDE window. If it still does not open (error from <code>pick</code>), double-click <b>Start-Development.cmd</b>, or drop the file in <code>%USERPROFILE%\.akzo-agent\inbox</code> and type <code>start</code>.</td></tr>
+      <tr><td>Two Akzo agents in the picker</td><td>Run <b>Install / Upgrade</b> from 3.0.0; it removes the old <code>akzo-sdd</code>. Restart the IDE.</td></tr>
+      <tr><td>Many permission prompts in VS Code</td><td>Run <code>install.ps1 -ConfigureVSCode</code>, set <code>specsDir</code> for the repository, and open that repository as the workspace (<a href="#access">Permissions</a>). Check <code>install.ps1 -Verify</code> shows <code>VSCODE settings block present</code>.</td></tr>
+      <tr><td>Helper still asks for approval after <code>-ConfigureVSCode</code></td><td>The agent changed the command form (other quoting, extra <code>;</code> or pipe). It is told to use the exact form; approve once, and report it if it repeats.</td></tr>
+      <tr><td><code>NOT ISOLATED</code> from verify</td><td>An <code>akzo-*</code> folder sits in a shared skill folder and is offered to every agent. Re-run <code>install.ps1</code> (removes ones it installed) or delete it yourself.</td></tr>
+      <tr><td><code>VERIFY FAILED ... MODIFIED</code></td><td>An installed file was edited. Re-run <code>install.ps1</code>; the edited copy is backed up first.</td></tr>
+      <tr><td><code>OUTDATED</code> from verify</td><td>This folder has newer files than the installed copy. Re-run <code>install.ps1</code>.</td></tr>
+      <tr><td>Agent cannot find the PBI (<code>NOT_FOUND</code>)</td><td>Check the folder is <code>&lt;tasks&gt;\&lt;repo-id&gt;\&lt;PBI-ID&gt;\</code>, with the repo level in between, and the file is named exactly <code>refined-pbi.md</code>. Run the <code>task -Id</code> check from <a href="#task">Start a task</a>.</td></tr>
+      <tr><td>"Allow edits?" for spec.md or plan.md in VS Code</td><td>Expected: the task folder is outside the workspace. Allow it, or add the tasks folder to the workspace (<a href="#access">Permissions</a>).</td></tr>
+      <tr><td><code>CONFIG</code> from verify or the installer</td><td>Fix the reported item in <code>repos.json</code>. Invalid JSON stops the installer before it changes anything.</td></tr>
+      <tr><td><code>Repository ... not found</code> from the helper</td><td>Fix <code>path</code> in <code>repos.json</code>, or clone the repository.</td></tr>
+      <tr><td><code>GRAPHIFY_UNAVAILABLE</code>, <code>NO_GRAPH</code>, <code>STALE_GRAPH</code></td><td>Expected without Graphify or after code changes. The agent falls back to targeted search.</td></tr>
+      <tr><td>Agent cannot run terminal commands in Visual Studio</td><td>Enable terminal tools in the Copilot Chat <b>Tools</b> panel.</td></tr>
+      <tr><td>A check is reported as "not run"</td><td>The agent could not execute it (missing SDK, private feed, secrets). Run the listed command yourself.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="evaluation">
+  <h2>Evaluation</h2>
+  <p>Full details, evidence sources, and the benchmark procedure are in <a href="evaluation-report.html">evaluation-report.html</a> (2026-10-19). Two separate evaluations:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Area</th><th>Status</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Agent file, helper, templates; activation/isolation at file level</td><td><span class="ok">PASS</span></td><td><code>scripts\test.ps1</code>: 104 passed, 0 failed</td></tr>
+      <tr><td>Permission reduction: no workflow-file reads, single helper call, VS Code settings block, auto-approve rule rejects chained commands</td><td><span class="ok">PASS</span> (simulated)</td><td><code>scripts\test.ps1</code>; prompts in a live VS Code session not yet observed</td></tr>
+      <tr><td>Refined-PBI intake: path resolution, missing input, ambiguous repository, artifact creation, resume, PBI change detection, configurable tasks folder</td><td><span class="ok">PASS</span> (simulated)</td><td><code>scripts\test.ps1</code> runs the helper calls the agent makes, in a temporary profile, including <code>specsDir</code> feature folders, input files, and repository skill discovery. No Copilot session has run this workflow yet.</td></tr>
+      <tr><td>Copilot running intake → spec → plan → implementation in a live IDE</td><td><span class="warn">NOT VERIFIED</span></td><td>No live IDE session or Akzo repository</td></tr>
+      <tr><td>Install, update, uninstall, dry runs, migration</td><td><span class="ok">PASS</span></td><td><code>scripts\test.ps1</code></td></tr>
+      <tr><td>Script static analysis</td><td><span class="ok">PASS</span></td><td>PSScriptAnalyzer 1.24.0: 0 errors, 0 warnings</td></tr>
+      <tr><td>Isolation at chat run time; agent in IDE picker</td><td><span class="warn">NOT VERIFIED</span></td><td>No live IDE session</td></tr>
+      <tr><td>Sonar compliance of application changes</td><td><span class="warn">NOT VERIFIED</span></td><td>No Akzo repository or Sonar analysis available</td></tr>
+      <tr><td>Application tests and coverage</td><td><span class="warn">NOT VERIFIED</span></td><td>Sample only; tests written, not executed</td></tr>
+      <tr><td>Copilot speed and efficiency</td><td><span class="warn">NOT YET BENCHMARKED</span></td><td>Procedure and <code>benchmark\results-template.csv</code> ready</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Agent instructions describe what to check; they are not evidence that generated code meets Sonar rules or coverage requirements. Those results come only from the repository's analyzers, tests, and Sonar analysis.</p>
+</section>
+
+</main>
+<footer>Akzo SDD Agent — Developed and maintained by Arun RG · No external assets; works offline.</footer>
+<script>
+(function () {
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta); return ok;
+  }
+  function selectPre(pre) {
+    var range = document.createRange(); range.selectNodeContents(pre);
+    var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  }
+  document.querySelectorAll('.cmd').forEach(function (box) {
+    var pre = box.querySelector('pre');
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.textContent = 'Copy'; btn.setAttribute('aria-label', 'Copy command');
+    btn.addEventListener('click', function () {
+      var text = pre.textContent;
+      var done = function (msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function () { done('Copied'); }, function () {
+          if (fallbackCopy(text)) { done('Copied'); } else { selectPre(pre); done('Press Ctrl+C'); }
+        });
+      } else if (fallbackCopy(text)) { done('Copied'); }
+      else { selectPre(pre); done('Press Ctrl+C'); }
+    });
+    box.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

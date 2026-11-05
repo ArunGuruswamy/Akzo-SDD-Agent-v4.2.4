@@ -1,0 +1,18 @@
+[
+  {
+    "key": "REUSE_EXISTING_VALIDATION_COMPONENTS",
+    "title": "Before adding a validation service, search for an existing one that does the same and reuse it.",
+    "profile": "shared",
+    "topic": "validation validator validate",
+    "signal": "existing exists shared reuse another duplicate already same",
+    "check": { "kind": "reuse-before-new", "typePattern": "Validation(Service|Helper|Manager|Provider)$" }
+  },
+  {
+    "key": "REUSE_EXISTING_MAPPING",
+    "title": "Before adding a mapper, search for an existing mapping of the same types and reuse it.",
+    "profile": "shared",
+    "topic": "mapping mapper map",
+    "signal": "existing exists shared reuse another duplicate already same",
+    "check": { "kind": "reuse-before-new", "typePattern": "(Mapper|Mapping(Service|Helper))$" }
+  }
+]
