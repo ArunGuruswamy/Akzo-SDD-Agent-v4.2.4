@@ -16,6 +16,17 @@
 - **Concurrency**: memory and task writes use unique temporary files, an atomic
   replace and per-file named mutexes. Concurrent chats or processes no longer
   lose updates or leave a missing file.
+- **Recovery**: an interrupted document extraction is rebuilt from its source;
+  a legacy `.tmp` sidecar is removed only after the content-addressed cache is
+  atomically restored.
+- **Repository purge**: confirmation gates deletion; default purge removes only
+  the selected repository's memory. Task removal remains opt-in and scoped.
+- **Profile upgrade**: edited shipped profile files are backed up and restored;
+  `profiles-custom` remains untouched. Regression output is whitespace-normalized
+  so Windows console wrapping does not hide the warning.
+- **Agent efficiency**: related C# symbols use one batched `arch -Queries` call;
+  same-revision evidence and solution discovery are reused. Token savings are
+  not claimed without host telemetry.
 - **Interaction**: optional empty multi-select (`allowEmpty`); Enter in the
   Custom Answer box no longer submits.
 - **Tests**: two environment-dependent test oracles corrected (legacy net48
@@ -33,36 +44,31 @@ Under RemoteSigned/AllSigned policies, see "Blocked or unsigned scripts" in
 `installation-guide.html`. Checksums establish integrity, not publisher identity
 or corporate approval. No VSIX, IDE modification or GitHub publication is included.
 
-## Verification scope (what was and was not run for this RC)
-Run by the release author, on fixtures:
-- **Analyzer**: built for net8.0 and net472 with 0 warnings.
-- **GraphQL**: 11 of 11 planted errors and 2 warnings found, with no findings
-  on valid operations; per-scope cache reuse and refresh; syntax errors located;
-  real StrawberryShake-style client mismatch reported.
-- **FluentValidation**: detected with the real FluentValidation 12.0.0 /
-  DependencyInjectionExtensions 11.11.0 packages, including the
-  sync-over-async defect.
-- **Incremental analysis**: identical to a fresh scan after body edits, block/arrow
-  switches, signature changes, a new member, files with directives and file deletion.
-- **Concurrency**: an 8-process stress test of the new write helpers kept
-  200 of 200 updates; the 4.2.3 pattern lost the file.
-- **PowerShell files**: all changed files parse without errors.
-- **Performance**: 5 interleaved runs against the 4.2.3 analyzer, medians:
-  - body-only incremental: 4584 → 3422 ms (2 projects, −25.3%);
-    7413 → 3280 ms (5 projects, −55.8%)
-  - cold, warm and signature-change scans: within noise; no speedup claimed
-
-**Not run by the release author:** the PowerShell regression suites (`test.ps1`,
-`test-analyzer.ps1`, `test-contract-readiness.ps1`, `test-interactions.ps1`,
-`test-portable.ps1`), the installer, and the GUI tests. On the build machine the
-execution policy refuses these unsigned, internet-marked scripts, and the policy
-was not bypassed. The previous full regression (4.2.3 source) was 483 passed and
-2 failed; both failures were traced to test oracles, which are corrected here.
-Run the suites under your signing policy before treating this RC as verified.
+## Verification scope
+Run against clean, extracted v4.2.4 packages:
+- **Full agent regression**: `scripts/test.ps1` — 487 passed, 0 failed, 0 skipped.
+- **Analyzer**: `scripts/test-analyzer.ps1` — 6 passed, including incremental
+  semantic invalidation and the FluentValidation sync-over-async evidence case.
+- **Contract readiness**: 23 passed; GraphQL is mechanically checked on fixtures,
+  with bounded context retrieval and unchanged-scope cache reuse.
+- **Interactions**: 17 passed. **Portability**: 69 passed.
+- **Installer GUI**: 9 passed, 0 failed; package Validate, repository Validate,
+  Save, Install, restart/reload, and clean-package integrity verified. The
+  simulated old copy with 20 extra build files is rejected.
+- **Configuration and safety**: existing repository registration reloads once;
+  purge confirmation and scope, profile backup/restore, repair, rollback, and
+  application-repository preservation are covered by the full suite.
+- **Package**: 250 files plus `release-manifest.json`; extracted package integrity
+  verified. Release builder rejects personal paths and excludes `bin`/`obj`.
+- **Token telemetry**: NOT VERIFIED. The local Copilot log has no model usage,
+  token, or tool-call counts, so no measured token savings are claimed.
 
 ## RC blockers and limitations
-- Live Visual Studio 2026 Chat controls, real DAB/CDMS/UI repositories, live
-  Sonar, and end-to-end model implementation time are **NOT VERIFIED**.
+- Live Visual Studio 2026 Chat controls, live Sonar, and end-to-end model
+  implementation time are **NOT VERIFIED**.
+- Corporate code-signing certification and any organization-specific signing
+  requirement are **NOT VERIFIED**; this ZIP is a Release Candidate, not a
+  production-approved or published artifact.
 - GraphQL: field-merge conflicts, directive locations and custom scalar formats
   are not validated; code-first schemas are not read (NO_SCHEMA); the generated
   client is compared by interface name only.

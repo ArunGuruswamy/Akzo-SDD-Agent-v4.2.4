@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Akzo.ArchitectureAnalyzer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("4.2.4.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("4.2.4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("4.2.4+1163da8f4cd882b2c662bf09ad33f662cf60c158")]
 [assembly: System.Reflection.AssemblyProductAttribute("Akzo.ArchitectureAnalyzer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Akzo.ArchitectureAnalyzer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("4.2.4.0")]

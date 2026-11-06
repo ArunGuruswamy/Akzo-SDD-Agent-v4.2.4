@@ -178,7 +178,10 @@ function Test-RepoPath([string]$given, [string]$exceptId = '') {
     if (-not (Test-Path -LiteralPath $full -PathType Container)) { $v.message = "Folder not found (or not reachable): $full."; return [pscustomobject]$v }
     try { $null = @(Get-ChildItem -LiteralPath $full -Force -ErrorAction Stop | Select-Object -First 1) } catch { $v.message = "Folder not accessible: $($_.Exception.Message)"; return [pscustomobject]$v }
     $dup = @((Read-Config).repos | Where-Object { $_ -and $_.id -ne $exceptId -and $_.path -and (ConvertTo-RepoPath $_.path) -eq $full }) | Select-Object -First 1
-    if ($dup) { $v.duplicateOf = "$($dup.id)"; $v.message = "Already registered as '$($dup.id)'."; return [pscustomobject]$v }
+    if ($dup) {
+        $v.duplicateOf = "$($dup.id)"
+        if ($exceptId) { $v.message = "Already registered as '$($dup.id)'."; return [pscustomobject]$v }
+    }
     if (Test-Path -LiteralPath (Join-Path $full '.git')) { $v.status = 'Valid'; $v.git = $true; $v.message = 'Git repository.'; return [pscustomobject]$v }
     $top = try { & git -C $full rev-parse --show-toplevel 2>$null } catch { '' }
     $v.status = 'Warning'

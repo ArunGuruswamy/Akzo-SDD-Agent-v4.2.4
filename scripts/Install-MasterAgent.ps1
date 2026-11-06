@@ -129,7 +129,7 @@ function Show-Repositories([string]$selectId) {
         if ($row.id -eq $selectId) { $it.Selected = $true; $it.Focused = $true }
     }
     $repoList.EndUpdate()
-    $info.Text = "This folder: v$Version.  Installed: $(Get-InstalledVersion).  Repositories: $($rows.Count).`nAfter installing: restart VS Code (or Visual Studio 2026 18.5+), pick 'akzo-master-sdd-v$Version' in the Copilot Chat agent picker, and type 'start'."
+    $info.Text = "Source: $Source (v$Version). Installed: $(Get-InstalledVersion). Repositories: $($rows.Count).`nAfter installing: restart VS Code (or Visual Studio 2026 18.5+), pick 'akzo-master-sdd-v$Version' in the Copilot Chat agent picker, and type 'start'."
     Update-RepoButtons
     $rows
 }
@@ -187,6 +187,7 @@ function Show-RepoDialog($row) {
     $validate = {
         $extra = @('-ValidateRepo', $tp.Text) + $(if ($row) { @('-EditRepo', $row.id) } else { @() })
         $r = Invoke-Engine 'Registry' $extra
+        Write-Log "Validate repository: $($tp.Text)`r`nSource: $Source`r`nExit: $($r.code)`r`n$($r.text)"
         $v = try { $r.text.Substring($r.text.IndexOf('{')) | ConvertFrom-Json } catch { $null }
         if (-not $v) { $vl.ForeColor = [Drawing.Color]::Red; $vl.Text = "Validation did not run: $($r.text)"; return $null }
         $vl.ForeColor = [Drawing.Color]::FromName($StatusColor[$v.status]); $vl.Text = "$($v.status): $($v.message)$(if ($v.path -and $v.path -ne $tp.Text.Trim()) { "`nWill be saved as: $($v.path)" })"
@@ -211,10 +212,11 @@ function Show-RepoDialog($row) {
             if (-not $v -or $v.status -eq 'Invalid') { return }
             if (-not $tn.Text.Trim()) { $vl.ForeColor = [Drawing.Color]::Red; $vl.Text = 'Enter a repository name.'; return }
             if ($v.status -eq 'Warning' -and [Windows.Forms.MessageBox]::Show("$($v.message)`n`nSave anyway?", 'Repository', 'YesNo', 'Warning') -ne 'Yes') { return }
-            $extra = if ($row) { @('-EditRepo', $row.id, '-RepoPath', $v.path, '-RepoName', $tn.Text.Trim()) } else { @('-AddRepo', $v.path, '-RepoName', $tn.Text.Trim(), '-RegistryOnly') }
+            $editId = if ($row) { $row.id } else { $v.duplicateOf }
+            $extra = if ($editId) { @('-EditRepo', $editId, '-RepoPath', $v.path, '-RepoName', $tn.Text.Trim()) } else { @('-AddRepo', $v.path, '-RepoName', $tn.Text.Trim(), '-RegistryOnly') }
             $r = Invoke-Engine 'Registry' $extra
             Write-Log $r.text
-            if ($r.code -eq 0) { $d.DialogResult = 'OK'; $d.Close() } else { $vl.ForeColor = [Drawing.Color]::Red; $vl.Text = ($r.text -split "`r?`n" | Where-Object { $_ -match 'NOT SAVED|skip|error' }) -join "`n" }
+            if ($r.code -eq 0) { $d.DialogResult = 'OK'; $d.Close() } else { $vl.ForeColor = [Drawing.Color]::Red; $vl.Text = "Save failed (exit $($r.code)). See the setup log for the full error." }
         })
     $d.ShowDialog($form)
 }
@@ -238,7 +240,7 @@ $repoButtons['Open in Explorer'].Add_Click({
         elseif ($row) { [void][Windows.Forms.MessageBox]::Show("Folder not found: $($row.path)", 'Open in Explorer', 'OK', 'Warning') }
     })
 $repoButtons['Validate'].Add_Click({
-        $rows = Show-Repositories (Get-Selected).id
+    $rows = @(Show-Repositories (Get-Selected).id)
         Write-Log $(if ($rows.Count) { ($rows | ForEach-Object { "{0,-8} {1}  {2}  - {3}" -f $_.validation, $_.name, $_.path, $_.message }) -join [Environment]::NewLine } else { 'No repository registered yet: click "Add Repository...".' })
     })
 $repoButtons['Refresh'].Add_Click({ [void](Show-Repositories (Get-Selected).id) })

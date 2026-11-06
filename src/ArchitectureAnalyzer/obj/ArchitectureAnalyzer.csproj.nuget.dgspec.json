@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "c:\\src\\Akzo-Agent-4.2.0\\release\\4.2.4\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj": {}
+    "C:\\src\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj": {}
   },
   "projects": {
-    "c:\\src\\Akzo-Agent-4.2.0\\release\\4.2.4\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj": {
+    "C:\\src\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj": {
       "version": "4.2.4",
       "restore": {
-        "projectUniqueName": "c:\\src\\Akzo-Agent-4.2.0\\release\\4.2.4\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj",
+        "projectUniqueName": "C:\\src\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj",
         "projectName": "Akzo.ArchitectureAnalyzer",
-        "projectPath": "c:\\src\\Akzo-Agent-4.2.0\\release\\4.2.4\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj",
-        "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
-        "outputPath": "c:\\src\\Akzo-Agent-4.2.0\\release\\4.2.4\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\obj\\",
+        "projectPath": "C:\\src\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\ArchitectureAnalyzer.csproj",
+        "packagesPath": "C:\\Users\\RGA\\.nuget\\packages\\",
+        "outputPath": "C:\\src\\Akzo-SDD-Agent-v4.2.4\\src\\ArchitectureAnalyzer\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\RGA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -28,16 +28,18 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://pkgs.dev.azure.com/akzonobelpc/_packaging/Color-IT-Feed/nuget/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net472": {
+            "framework": "net472",
+            "targetAlias": "net472",
             "projectReferences": {}
           },
-          "net472": {
-            "targetAlias": "net472",
+          "net8.0": {
+            "framework": "net8.0",
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -51,10 +53,40 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
+        "net472": {
+          "framework": "net472",
+          "targetAlias": "net472",
+          "dependencies": {
+            "Microsoft.Build": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[18.0.2, )"
+            },
+            "Microsoft.Build.Framework": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[18.0.2, )"
+            },
+            "Microsoft.Build.Locator": {
+              "target": "Package",
+              "version": "[1.11.2, )"
+            },
+            "Microsoft.CodeAnalysis.CSharp.Workspaces": {
+              "target": "Package",
+              "version": "[5.3.0, )"
+            },
+            "Microsoft.CodeAnalysis.Workspaces.MSBuild": {
+              "target": "Package",
+              "version": "[5.3.0, )"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401\\RuntimeIdentifierGraph.json"
+        },
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.Build": {
@@ -99,40 +131,26 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.31, 8.0.31]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
-        },
-        "net472": {
-          "targetAlias": "net472",
-          "dependencies": {
-            "Microsoft.Build": {
-              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "target": "Package",
-              "version": "[18.0.2, )"
-            },
-            "Microsoft.Build.Framework": {
-              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "target": "Package",
-              "version": "[18.0.2, )"
-            },
-            "Microsoft.Build.Locator": {
-              "target": "Package",
-              "version": "[1.11.2, )"
-            },
-            "Microsoft.CodeAnalysis.CSharp.Workspaces": {
-              "target": "Package",
-              "version": "[5.3.0, )"
-            },
-            "Microsoft.CodeAnalysis.Workspaces.MSBuild": {
-              "target": "Package",
-              "version": "[5.3.0, )"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

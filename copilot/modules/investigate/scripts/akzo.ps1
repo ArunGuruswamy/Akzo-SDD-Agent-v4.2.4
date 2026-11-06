@@ -438,6 +438,7 @@ function Sync-InputManifest([string]$dir) {
                     $text = ConvertTo-PbiText $f.FullName
                     New-Item -ItemType Directory -Force -Path $cache | Out-Null
                     Write-TextAtomic $read $text   # content-addressed: concurrent extractions write the same text
+                    Remove-Item -LiteralPath "$read.tmp" -Force -ErrorAction SilentlyContinue
                 } catch { $status = 'unreadable'; $note = $_.Exception.Message; $read = '' }
             }
         } elseif ($kind -eq 'image') { $status = 'image'; $note = 'not read as text; attach it in chat if it matters' }

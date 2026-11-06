@@ -8,12 +8,12 @@
 .NOTES
   Akzo SDD Agent — Developed and maintained by Arun RG
 #>
-param([switch]$KeepTemp)
+param([switch]$KeepTemp, [switch]$SetupOnly, [string]$RepositoryPath, [string]$SetupHomeRoot)
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes, UIAutomationClientSideProviders, System.IO.Compression, System.IO.Compression.FileSystem   # client-side providers expose classic Win32 controls
 $Source = Split-Path -Parent $PSScriptRoot
 $script:fail = 0; $script:pass = 0
-function Check([bool]$ok, [string]$what) { if ($ok) { $script:pass++; Write-Output "PASS  $what" } else { $script:fail++; Write-Output "FAIL  $what" } }
+function Check([bool]$ok, [string]$what, [string]$detail = '') { if ($ok) { $script:pass++; Write-Output "PASS  $what" } else { $script:fail++; Write-Output "FAIL  $what"; if ($detail) { Write-Output $detail } } }
 $UIA = [Windows.Automation.AutomationElement]
 Add-Type -Namespace '' -Name AkzoWin -MemberDefinition @'
 [DllImport("user32.dll")] public static extern IntPtr GetDlgItem(IntPtr hDlg, int id);
@@ -26,7 +26,7 @@ public delegate bool EnumWindowCallback(IntPtr h, IntPtr data);
 [DllImport("user32.dll")] public static extern bool EnumWindows(EnumWindowCallback callback, IntPtr data);
 [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetWindowText(IntPtr h, System.Text.StringBuilder text, int max);
 '@
-function Find-Window([string]$titleLike, [int]$seconds = 20) {
+function Find-Window([string]$titleLike, [int]$seconds = 20, [string]$sourcePath = '') {
     $deadline = (Get-Date).AddSeconds($seconds)
     while ((Get-Date) -lt $deadline) {
         $handles = New-Object 'Collections.Generic.List[IntPtr]'
@@ -37,7 +37,16 @@ function Find-Window([string]$titleLike, [int]$seconds = 20) {
             if ($text.ToString() -like $titleLike) { $handles.Add($handle) }
             return $true
         }, [IntPtr]::Zero)
-        if ($handles.Count) { return $UIA::FromHandle($handles[0]) }
+        foreach ($handle in $handles) {
+            try {
+                $window = $UIA::FromHandle($handle)
+                if (-not $sourcePath) { return $window }
+                $labels = $window.FindAll([Windows.Automation.TreeScope]::Children, [Windows.Automation.Condition]::TrueCondition)
+                if (@($labels | Where-Object { $_.Current.Name -like "Source: $sourcePath (*)*" }).Count) { return $window }
+            } catch [System.Management.Automation.MethodInvocationException] {
+                if ($_.Exception.InnerException -isnot [Windows.Automation.ElementNotAvailableException]) { throw }
+            } catch [Windows.Automation.ElementNotAvailableException] { }
+        }
         Start-Sleep -Milliseconds 300
     }
     $null
@@ -85,11 +94,16 @@ function Get-EditText($top) {
 
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ("akzo-gui-" + [guid]::NewGuid().ToString('N').Substring(0, 6))
 $home2 = Join-Path $tmp 'h'
+if ($SetupHomeRoot) {
+    if (-not $SetupOnly) { throw '-SetupHomeRoot requires -SetupOnly (no uninstall or intake in an existing profile).' }
+    $home2 = $SetupHomeRoot
+}
 New-Item -ItemType Directory -Force $home2 | Out-Null
 $started = @()
 try {
     $null = & powershell.exe -NoProfile -File (Join-Path $Source 'scripts\install.ps1') -HomeRoot $home2
-    Check ($LASTEXITCODE -eq 0) 'setup: agent installed in a temporary profile'
+    Check ($LASTEXITCODE -eq 0) 'setup: agent installed in the selected test profile'
+    if (-not $SetupOnly) {
     $docx = Join-Path $tmp 'PBI 305912 Paint System.docx'
     Set-Content (Join-Path $tmp 'business-rules.md') "# Business rules`nA paint system starts in Draft."
     Set-Content (Join-Path $tmp 'api-contract.yaml') "openapi: 3.0.0`npaths: {}"
@@ -134,9 +148,27 @@ try {
         Check ((Test-Path (Join-Path (Split-Path $pbi) 'supporting\business-rules.md')) -and (Test-Path (Join-Path (Split-Path $pbi) 'supporting\api-contract.yaml'))) 'supporting documents copied under supporting\ beside the PBI'
     }
 
+    }
     # 2. Setup window: Verify.
+    $oldWindow = $null
+    if ($SetupOnly) {
+        $oldSource = Join-Path $tmp 'old-release'
+        New-Item -ItemType Directory -Force $oldSource | Out-Null
+        Copy-Item "$Source\*" $oldSource -Recurse -Force
+        New-Item -ItemType Directory -Force "$oldSource\src\ArchitectureAnalyzer\obj" | Out-Null
+        foreach ($number in 1..20) { Set-Content "$oldSource\src\ArchitectureAnalyzer\obj\old-$number.cache" 'old build file' }
+        $started += Start-Process cmd.exe -ArgumentList "/c `"`"$(Join-Path $oldSource 'Install-MasterAgent.cmd')`" -HomeRoot `"$home2`"`"" -PassThru -WindowStyle Minimized
+        $oldWindow = Find-Window 'Akzo Master SDD Agent * - Setup' 20 $oldSource
+        Check ([bool]$oldWindow) 'old setup window is identified by its source folder'
+        if ($oldWindow) {
+            Invoke-ChildButton $oldWindow 'Verify Installation'
+            $deadline = (Get-Date).AddSeconds(30); $oldLog = ''
+            while ((Get-Date) -lt $deadline -and $oldLog -notmatch '== Verify reported problems') { $oldLog = Get-EditText $oldWindow }
+            Check ($oldLog -match 'PACKAGE INTEGRITY FAILED' -and $oldLog -match 'old-20.cache') 'old release with 20 extra build files fails package integrity without bypass'
+        }
+    }
     $started += Start-Process cmd.exe -ArgumentList "/c `"`"$(Join-Path $Source 'Install-MasterAgent.cmd')`" -HomeRoot `"$home2`"`"" -PassThru -WindowStyle Minimized
-    $win = Find-Window 'Akzo Master SDD Agent * - Setup'
+    $win = Find-Window 'Akzo Master SDD Agent * - Setup' 20 $Source
     Check ([bool]$win) 'Install-MasterAgent.cmd opens the setup window'
     if ($win) {
         Invoke-ChildButton $win 'Verify Installation'
@@ -147,7 +179,17 @@ try {
         }
         Check ($log -match 'VERIFY OK' -and $log -match '== Verify finished OK ==') 'setup window: Verify button runs the check and shows VERIFY OK'
         # Add Repository: a path pasted with quotes and spaces is saved at once, with the name suggested from the folder.
-        $clone = Join-Path $tmp 'My Clone'; New-Item -ItemType Directory -Force $clone | Out-Null; & git -C $clone init -q
+        $clone = if ($RepositoryPath) { $RepositoryPath } else { Join-Path $tmp 'My Clone' }
+        if (-not $RepositoryPath) {
+            New-Item -ItemType Directory -Force "$clone\src\App\obj", "$clone\src\App\bin" | Out-Null
+            & git -C $clone init -q
+            Set-Content "$clone\App.sln" ''
+            Set-Content "$clone\src\App\App.csproj" '<Project Sdk="Microsoft.NET.Sdk" />'
+            Set-Content "$clone\src\App\obj\Generated.g.cs" 'generated'
+            Set-Content "$clone\src\App\bin\App.dll" 'generated'
+        }
+        $existing = @((Get-Content (Join-Path $home2 '.akzo-agent\repos.json') -Raw | ConvertFrom-Json).repos | Where-Object { $_.path -eq $clone }) | Select-Object -First 1
+        $expectedName = if ($existing) { $existing.name } else { Split-Path $clone -Leaf }
         Invoke-ChildButton $win 'Add Repository...'
         $add = $null   # an owned dialog: UI Automation lists it under the setup window
         for ($i = 0; $i -lt 40 -and -not $add; $i++) { Start-Sleep -Milliseconds 500; $add = Find-In -parent $win -prop 'NameProperty' -value 'Add repository' }
@@ -156,6 +198,7 @@ try {
             while (($h = [AkzoWin]::FindWindowEx([IntPtr]$add.Current.NativeWindowHandle, $h, [NullString]::Value, [NullString]::Value)) -ne [IntPtr]::Zero) {
                 $cls = New-Object Text.StringBuilder 256; [void][AkzoWin]::GetClassName($h, $cls, 256); if ($cls.ToString() -match 'EDIT') { $edits += $h }
             }
+            if (-not $RepositoryPath) {
             Invoke-ChildButton $add 'Browse...'
             $folder = Find-Window 'Select repository folder'
             Check ([bool]$folder) 'setup Browse opens the native Windows Shell folder picker'
@@ -172,16 +215,40 @@ try {
             $chosen = New-Object Text.StringBuilder 4096
             [void][AkzoWin]::SendMessage($edits[1], 0x000D, [IntPtr]4096, $chosen)
             Check ($chosen.ToString() -eq $clone) 'native Explorer folder selection returns the exact selected repository path'
+            }
             [void][AkzoWin]::SendMessage($edits[1], 0x000C, [IntPtr]::Zero, "`"$clone`"")   # WM_SETTEXT on the path box, as pasted
+            [void][AkzoWin]::SendMessage($edits[0], 0x000C, [IntPtr]::Zero, $expectedName)
+            Invoke-ChildButton $add 'Validate'
+            $deadline = (Get-Date).AddSeconds(30); $validationLog = ''
+            while ((Get-Date) -lt $deadline -and $validationLog -notmatch '"status":\s*"Valid"') { $validationLog = Get-EditText $win }
+            Check ($validationLog -match 'package integrity OK' -and $validationLog -match '"status":\s*"Valid"' -and $validationLog -match [regex]::Escape($Source)) 'setup Validate: package and selected repository pass; exact source is logged'
             Invoke-ChildButton $add 'Save'
             $deadline = (Get-Date).AddSeconds(30); $saved = $null
             while ((Get-Date) -lt $deadline -and -not $saved) { Start-Sleep -Milliseconds 500; $saved = try { @((Get-Content (Join-Path $home2 '.akzo-agent\repos.json') -Raw | ConvertFrom-Json).repos | Where-Object { $_.path -eq $clone }) | Select-Object -First 1 } catch { $null } }
-            Check ($saved -and $saved.name -eq 'My Clone') 'setup window: Add Repository saves a pasted, quoted path with the suggested name'
+            Check ($saved -and $saved.name -eq $expectedName) 'setup window: Save persists the selected repository without rejecting existing configuration'
         } else { Check $false 'setup window: Add Repository opens its dialog' }
+        Invoke-ChildButton $win 'Install / Upgrade'
+        $deadline = (Get-Date).AddSeconds(90); $installLog = ''
+        while ((Get-Date) -lt $deadline -and $installLog -notmatch 'Verify after Install|Still to resolve after Install') { $installLog = Get-EditText $win }
+        Check ($installLog -match '== Install finished OK ==' -and $installLog -notmatch 'CHECK \[Failed\]') 'setup window: Install completes and post-install verification has no failed checks'
         Invoke-ChildButton $win 'Close'
+        $deadline = (Get-Date).AddSeconds(10)
+        while ((Get-Date) -lt $deadline -and (Find-Window 'Akzo Master SDD Agent * - Setup' 1 $Source)) { }
+        $started += Start-Process cmd.exe -ArgumentList "/c `"`"$(Join-Path $Source 'Install-MasterAgent.cmd')`" -HomeRoot `"$home2`"`"" -PassThru -WindowStyle Minimized
+        $reopened = Find-Window 'Akzo Master SDD Agent * - Setup' 20 $Source
+        if ($reopened) {
+            Invoke-ChildButton $reopened 'Validate'
+            $deadline = (Get-Date).AddSeconds(30); $reloadLog = ''
+            while ((Get-Date) -lt $deadline -and ($reloadLog -notmatch [regex]::Escape($clone) -or $reloadLog -notmatch '(?m)^Valid\s')) { $reloadLog = Get-EditText $reopened }
+            $entries = @((Get-Content (Join-Path $home2 '.akzo-agent\repos.json') -Raw | ConvertFrom-Json).repos | Where-Object { $_.path -eq $clone })
+            Check ($entries.Count -eq 1 -and $entries[0].name -eq $expectedName -and $reloadLog -match '(?m)^Valid\s' -and $reloadLog -match [regex]::Escape($clone)) 'setup restart: saved repository reloads, validates, and is not duplicated' "Entries: $($entries.Count); expected name: $expectedName; saved name: $($entries[0].name)`nReload log: $reloadLog"
+            Invoke-ChildButton $reopened 'Close'
+        } else { Check $false 'setup restart: window reopens' }
     }
+    if ($oldWindow) { Invoke-ChildButton $oldWindow 'Close'; $oldWindow = $null }
 
     # 3. Uninstall with confirmation.
+    if (-not $SetupOnly) {
     $started += Start-Process cmd.exe -ArgumentList "/c `"`"$(Join-Path $Source 'Uninstall-MasterAgent.cmd')`" -HomeRoot `"$home2`"`"" -PassThru -WindowStyle Minimized
     $ask = Find-Window 'Uninstall Akzo Master SDD Agent'
     Check ([bool]$ask) 'Uninstall-MasterAgent.cmd asks for confirmation first'
@@ -191,7 +258,9 @@ try {
         Check ([bool]$done -and -not (Test-Path (Join-Path $home2 '.copilot\agents\akzo-master-sdd.agent.md')) -and (Test-Path (Join-Path $home2 '.akzo-agent\repos.json'))) 'uninstall removes the agent and keeps repos.json'
         if ($done) { Close-MessageBox $done 2 }
     }
+    }
 } finally {
+    if ($oldWindow) { try { Invoke-ChildButton $oldWindow 'Close' } catch { } }
     foreach ($p in $started) { if ($p -and -not $p.HasExited) { $p.WaitForExit(10000) | Out-Null } }
     if (-not $KeepTemp) { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue } else { Write-Output "Temp kept: $tmp" }
 }

@@ -86,6 +86,7 @@ namespace Fixture
     Put 'workspace\Library\Validation.cs' @'
 using System;
 using System.Threading.Tasks;
+using FluentValidation;
 namespace FluentValidation
 {
     public class ValidationResult { }
@@ -104,7 +105,11 @@ namespace Fixture
     $null = Analyze 'cache'
     $fvIx = [IO.File]::ReadAllText("$temp\cache\index.json") | ConvertFrom-Json
     $risk = @($fvIx.patterns | Where-Object { $_.name -like 'FluentValidation risk*' })[0]
-    Assert ($risk.observed -and (@($risk.evidence) -join ';') -match 'Validation\.cs:\d+ Validate ' -and (@($risk.evidence) -join ';') -match 'Validation\.cs:\d+ MustAsync ') 'FluentValidation: an async rule reached through a synchronous Validate call is reported at both locations'
+    $riskEvidence = @($risk.evidence) -join ';'
+    $riskOk = $risk.observed -and $riskEvidence -match 'Validation\.cs:\d+ Validate ' -and $riskEvidence -match 'Validation\.cs:\d+ MustAsync '
+    $validationDetails = @($fvIx.documents | ForEach-Object { "$($_.path) [$($_.analysis)]: $(@($_.validation | ForEach-Object { "$($_.kind):$($_.method):$($_.model):$($_.line)" }) -join ',')" }) -join '; '
+    $projectDetails = @($fvIx.projects | ForEach-Object { "$($_.path) [$($_.analysis), errors=$($_.compilationErrors)]: $(@($_.compilationDiagnostics) -join ',')" }) -join '; '
+    Assert $riskOk "FluentValidation: an async rule reached through a synchronous Validate call is reported at both locations; observed=$($risk.observed); evidence=$riskEvidence; validation=$validationDetails; projects=$projectDetails"
     Remove-Item -LiteralPath "$temp\workspace\Library\Service.cs"
     $removed = Analyze 'cache'
     $removedIx = [IO.File]::ReadAllText("$temp\cache\index.json") | ConvertFrom-Json
